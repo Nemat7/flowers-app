@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Окружение и секреты
+.env
+
+# Загруженные файлы и статика
+backend/media/
+backend/staticfiles/
+
+# macOS / IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Flutter
+app/build/
+app/.dart_tool/
+app/.flutter-plugins*
+app/.packages
+
+# Node
+node_modules/
+
+# Сборки
+*.apk

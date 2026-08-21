@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>v7 · 01 — Главная</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+  /* баннеры: кадр с аркой + подпись на бумаге, без «плашки поверх фото» */
+  .promo { flex:0 0 232px; }
+  .promo .ph { height:196px; }
+  .promo .ph .tag {
+    position:absolute; left:12px; bottom:12px; background:var(--clay); color:#fff;
+    font-size:9.5px; font-weight:800; letter-spacing:.16em; text-transform:uppercase;
+    padding:5px 10px; border-radius:999px;
+  }
+  .promo h3 { font-size:20px; line-height:1.12; margin-top:11px; }
+  .promo p { font-size:12px; color:var(--ink-2); font-weight:500; margin-top:3px; }
+
+  /* категории: арочные плитки вместо кружков */
+  .cat { flex:0 0 92px; }
+  .cat .ph { height:112px; }
+  .cat span { display:block; text-align:center; font-size:12.5px; font-weight:600; margin-top:9px; }
+
+  /* наша мастерская: карточка товара с печатью */
+  .item { flex:0 0 158px; }
+  .item .ph { height:200px; }
+  .item .ph .seal { position:absolute; left:12px; bottom:12px; }
+  .item .nm { font-size:17px; line-height:1.15; margin-top:11px; }
+  .item .pr { font-size:13px; font-weight:700; margin-top:4px; }
+  .item .pr s { color:var(--ink-3); font-weight:500; text-decoration:none; }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="time">9:41</span>
+  <div class="icons">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect y="7" width="3" height="5" rx="1" fill="#171310"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#171310"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#171310"/><rect x="15" width="3" height="12" rx="1" fill="#171310"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#171310"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#171310"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#171310"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="#171310" opacity=".4" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#171310"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#171310" opacity=".4"/></svg>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="addr">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-5.6-7-11a7 7 0 1 1 14 0c0 5.4-7 11-7 11Z" stroke="#171310" stroke-width="2"/><circle cx="12" cy="10" r="2.6" stroke="#171310" stroke-width="2"/></svg>
+    ул. Рудаки 25 <small>· доставка</small>
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="#A79C90" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <div class="icon-btn">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9Z" stroke="#171310" stroke-width="2" stroke-linejoin="round"/><path d="M10 20a2.2 2.2 0 0 0 4 0" stroke="#171310" stroke-width="2" stroke-linecap="round"/></svg>
+    <div class="dot"></div>
+  </div>
+</div>
+
+<div class="title">
+  <h1 class="display">Что подарим,<br>Неъмат?</h1>
+</div>
+
+<div class="searchrow">
+  <div class="search">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#A79C90" stroke-width="2.2"/><path d="m20 20-3.5-3.5" stroke="#A79C90" stroke-width="2.2" stroke-linecap="round"/></svg>
+    Букет, сладости, магазин…
+  </div>
+  <div class="icon-btn" style="width:47px;height:47px">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 7h10M18 7h2M4 17h4M12 17h8" stroke="#171310" stroke-width="2.2" stroke-linecap="round"/><circle cx="16" cy="7" r="2.4" stroke="#171310" stroke-width="2.2"/><circle cx="10" cy="17" r="2.4" stroke="#171310" stroke-width="2.2"/></svg>
+  </div>
+</div>
+
+<!-- Banner -->
+<div class="sechead"><div class="l"><h2 class="display">Сейчас</h2></div><a href="#">ВСЕ</a></div>
+<div class="rail">
+  <div class="promo">
+    <div class="ph arch"><img src="../../references/photos/crop/g7.jpg" alt=""><div class="tag">Акция</div></div>
+    <h3 class="display">−20% на первый заказ</h3>
+    <p>по промокоду SPRING10</p>
+  </div>
+  <div class="promo">
+    <div class="ph arch"><img src="../../references/photos/crop/b6.jpg" alt=""><div class="tag">Доставка</div></div>
+    <h3 class="display">Бесплатно от 300 с.</h3>
+    <p>по центру Душанбе</p>
+  </div>
+</div>
+
+<!-- Category -->
+<div class="sechead"><div class="l"><h2 class="display">Категории</h2></div></div>
+<div class="rail">
+  <div class="cat"><div class="ph arch"><img src="../../references/photos/crop/b4.jpg" alt=""></div><span>Букеты</span></div>
+  <div class="cat"><div class="ph arch"><img src="../../references/photos/crop/g7.jpg" alt=""></div><span>Композиции</span></div>
+  <div class="cat"><div class="ph arch"><img src="../../references/photos/crop/s3.jpg" alt=""></div><span>Сладости</span></div>
+  <div class="cat"><div class="ph arch"><img src="../../references/photos/crop/g6.jpg" alt=""></div><span>Открытки</span></div>
+</div>
+
+<!-- Product.is_featured — наша собственная продукция -->
+<div class="sechead">
+  <div class="l"><div class="seal">F</div><h2 class="display">Наша мастерская</h2></div>
+  <a href="#">ВСЕ</a>
+</div>
+<div class="rail">
+  <div class="item">
+    <div class="ph arch"><img src="../../references/photos/crop/b1.jpg" alt=""><div class="seal sm">F</div></div>
+    <div class="nm display">Гортензия с орхидеей</div>
+    <div class="pr">450 с. <s>· 35–40 см</s></div>
+  </div>
+  <div class="item">
+    <div class="ph arch"><img src="../../references/photos/crop/g2.jpg" alt=""><div class="seal sm">F</div></div>
+    <div class="nm display">25 белых роз</div>
+    <div class="pr">450 с. <s>· 60 см</s></div>
+  </div>
+  <div class="item">
+    <div class="ph arch"><img src="../../references/photos/crop/s1.jpg" alt=""><div class="seal sm">F</div></div>
+    <div class="nm display">Кекс с корицей</div>
+    <div class="pr">85 с.</div>
+  </div>
+</div>
+
+<!-- Shop -->
+<div class="sechead"><div class="l"><h2 class="display">Магазины рядом</h2></div><a href="#">ВСЕ</a></div>
+<div class="shop">
+  <div class="ph">
+    <img src="../../references/photos/crop/b3.jpg" alt="">
+    <div class="tags"><div class="badge"><i></i>Открыто</div></div>
+    <div class="fav"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#171310" stroke-width="2" stroke-linejoin="round"/></svg></div>
+  </div>
+  <div class="meta">
+    <div class="logo"><img src="../../references/photos/bloom logo.jpg" alt=""></div>
+    <div>
+      <div class="nm display">Bloom · цветочная мастерская</div>
+      <div class="sub">Цветы <s></s> 35–45 мин <s></s> от 15 с.</div>
+    </div>
+    <div class="rt">★ 4.9</div>
+  </div>
+</div>
+<div class="shop">
+  <div class="ph">
+    <img src="../../references/photos/crop/g1.jpg" alt="">
+    <div class="tags"><div class="badge"><i></i>Открыто</div></div>
+    <div class="fav"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#171310" stroke-width="2" stroke-linejoin="round"/></svg></div>
+  </div>
+  <div class="meta">
+    <div class="logo"><img src="../../references/photos/logo gulianor.jpg" alt=""></div>
+    <div>
+      <div class="nm display">Guli Anor</div>
+      <div class="sub">Цветы <s></s> 40–55 мин <s></s> от 20 с.</div>
+    </div>
+    <div class="rt">★ 4.8</div>
+  </div>
+</div>
+<div class="shop">
+  <div class="ph">
+    <img src="../../references/photos/crop/s2.jpg" alt="">
+    <div class="tags"><div class="badge closed"><i></i>Закрыто</div></div>
+    <div class="fav"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#171310" stroke-width="2" stroke-linejoin="round"/></svg></div>
+  </div>
+  <div class="meta">
+    <div class="logo"><img src="../../references/photos/safia logo.jpg" alt=""></div>
+    <div>
+      <div class="nm display">Safia · десерты</div>
+      <div class="sub">Сладости <s></s> 25–40 мин <s></s> от 10 с.</div>
+    </div>
+    <div class="rt">★ 4.7</div>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="it on">
+    <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.5Z" stroke="#C0563E" stroke-width="1.9" stroke-linejoin="round"/></svg>
+    <span>Главная</span>
+  </div>
+  <div class="it">
+    <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#A79C90" stroke-width="1.9"/><path d="m20 20-3.5-3.5" stroke="#A79C90" stroke-width="1.9" stroke-linecap="round"/></svg>
+    <span>Поиск</span>
+  </div>
+  <div class="it">
+    <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M6 3h12v18l-2-1.5L14 21l-2-1.5L10 21l-2-1.5L6 21V3Z" stroke="#A79C90" stroke-width="1.9" stroke-linejoin="round"/><path d="M9 8h6M9 12h6" stroke="#A79C90" stroke-width="1.9" stroke-linecap="round"/></svg>
+    <span>Заказы</span>
+  </div>
+  <div class="it">
+    <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#A79C90" stroke-width="1.9"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" stroke="#A79C90" stroke-width="1.9" stroke-linecap="round"/></svg>
+    <span>Профиль</span>
+  </div>
+</div>
+<div class="homebar"></div>
+
+</body>
+</html>

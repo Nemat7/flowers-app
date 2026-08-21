@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>02 — Магазин «Лотос»</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:390px; height:844px; overflow:hidden; }
+  body {
+    font-family:-apple-system,'SF Pro Text','SF Pro Display',Inter,'Segoe UI',sans-serif;
+    background:#F7F7F8; color:#1A1A1A; position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  .statusbar {
+    height:54px; padding:18px 28px 0; display:flex; justify-content:space-between;
+    align-items:center; position:absolute; top:0; left:0; right:0; z-index:5;
+  }
+  .statusbar .time { font-size:15px; font-weight:600; }
+  .statusbar .icons { display:flex; align-items:center; gap:6px; }
+  /* hero */
+  .hero {
+    height:210px; position:relative; overflow:hidden;
+  }
+  .hero > img.bg { position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; display:block; }
+  .hero::after {
+    content:''; position:absolute; left:0; right:0; top:0; height:100px;
+    background:linear-gradient(rgba(0,0,0,.32), transparent); pointer-events:none;
+  }
+  .navbtn {
+    position:absolute; top:60px; width:36px; height:36px; border-radius:50%;
+    background:rgba(255,255,255,.92); display:flex; align-items:center;
+    justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,.10);
+  }
+  .navbtn.back { left:16px; }
+  .navbtn.fav { right:16px; font-size:15px; }
+  /* shop card */
+  .shopcard {
+    margin:-34px 16px 0; background:#fff; border-radius:20px; padding:16px 18px;
+    box-shadow:0 4px 16px rgba(0,0,0,.08); position:relative; z-index:2;
+  }
+  .shopcard .row1 { display:flex; justify-content:space-between; align-items:center; }
+  .shopcard h1 { font-size:20px; font-weight:800; }
+  .badge {
+    background:#E8F5E9; color:#5B8C5A; font-size:11px; font-weight:700;
+    border-radius:8px; padding:4px 9px;
+  }
+  .shopcard .meta { display:flex; gap:14px; margin-top:8px; font-size:12.5px; color:#6B7280; flex-wrap:wrap; }
+  .shopcard .meta b { color:#1A1A1A; font-weight:600; }
+  .shopcard .addr { margin-top:8px; font-size:12.5px; color:#6B7280; display:flex; align-items:center; gap:5px; }
+  /* chips */
+  .chips { display:flex; gap:8px; padding:14px 16px 4px; overflow:hidden; }
+  .chip {
+    flex:0 0 auto; background:#fff; border-radius:20px; padding:8px 14px;
+    font-size:13px; font-weight:600; color:#4B5563;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+  }
+  .chip.on { background:#D6336C; color:#fff; }
+  /* grid */
+  .grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:12px 16px;
+  }
+  .item { background:#fff; border-radius:20px; overflow:hidden;
+    box-shadow:0 4px 16px rgba(0,0,0,.06); }
+  .item .ph { height:104px; overflow:hidden; }
+  .item .ph > img { width:100%; height:100%; object-fit:cover; display:block; }
+  .item .inf { padding:9px 11px 11px; }
+  .item .nm { font-size:13px; font-weight:700; line-height:1.2; }
+  .item .cmp { font-size:11px; color:#6B7280; margin-top:3px; line-height:1.3;
+    height:28px; overflow:hidden; }
+  .item .pr { display:flex; justify-content:space-between; align-items:center; margin-top:7px; }
+  .item .pr b { font-size:14.5px; }
+  .item .add {
+    width:28px; height:28px; border-radius:10px; background:#D6336C; color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:600;
+  }
+  .item .add.in { background:#E8F5E9; color:#5B8C5A; font-size:13px; }
+  /* cart pill */
+  .cartpill {
+    position:absolute; left:16px; right:16px; bottom:26px; height:56px;
+    background:#D6336C; border-radius:18px; color:#fff; display:flex;
+    align-items:center; justify-content:space-between; padding:0 18px;
+    box-shadow:0 8px 24px rgba(214,51,108,.35); z-index:4;
+  }
+  .cartpill .l { display:flex; align-items:center; gap:10px; font-size:14.5px; font-weight:600; }
+  .cartpill .cnt {
+    background:rgba(255,255,255,.25); border-radius:9px; min-width:24px; height:24px;
+    display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700;
+  }
+  .cartpill b { font-size:15.5px; }
+  .homebar {
+    position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+    width:134px; height:5px; border-radius:3px; background:#1A1A1A; z-index:6;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <img class="bg" src="img/shop-front.jpg" alt="Магазин «Лотос»">
+  <div class="statusbar">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1" fill="#1A1A1A"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#1A1A1A"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#1A1A1A"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#1A1A1A"/></svg>
+      <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#1A1A1A"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#1A1A1A"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#1A1A1A"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#1A1A1A" opacity=".4" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#1A1A1A"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#1A1A1A" opacity=".4"/></svg>
+    </div>
+  </div>
+  <div class="navbtn back">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <div class="navbtn fav">🤍</div>
+</div>
+
+<div class="shopcard">
+  <div class="row1"><h1>Лотос</h1><span class="badge">Открыто до 22:00</span></div>
+  <div class="meta">
+    <span>★ <b>4.9</b> (320 отзывов)</span>
+    <span>🛵 <b>35–45 мин</b></span>
+    <span>Мин. заказ <b>150 с.</b></span>
+  </div>
+  <div class="addr">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-5.6-7-11a7 7 0 1 1 14 0c0 5.4-7 11-7 11Z" stroke="#D6336C" stroke-width="2"/><circle cx="12" cy="10" r="2.6" stroke="#D6336C" stroke-width="2"/></svg>
+    ул. Айни 12 · 1.8 км от вас · Доставка 85 с.
+  </div>
+</div>
+
+<div class="chips">
+  <div class="chip on">Все</div>
+  <div class="chip">🌹 Розы</div>
+  <div class="chip">🌸 Пионы</div>
+  <div class="chip">Композиции</div>
+  <div class="chip">До 300 с.</div>
+</div>
+
+<div class="grid">
+  <div class="item">
+    <div class="ph"><img src="img/roses-red.jpg" alt="25 роз «Фридом»"></div>
+    <div class="inf">
+      <div class="nm">25 роз «Фридом»</div>
+      <div class="cmp">Красные розы 60 см, эвкалипт, крафт</div>
+      <div class="pr"><b>450 с.</b><div class="add in">1</div></div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="ph"><img src="img/tulips.jpg" alt="15 тюльпанов микс"></div>
+    <div class="inf">
+      <div class="nm">15 тюльпанов микс</div>
+      <div class="cmp">Тюльпаны розовый/белый, лента</div>
+      <div class="pr"><b>280 с.</b><div class="add">+</div></div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="ph"><img src="img/box-flowers.jpg" alt="Композиция «Нежность»"></div>
+    <div class="inf">
+      <div class="nm">Композиция «Нежность»</div>
+      <div class="cmp">Розы, эустома, гипсофила в шляпной коробке</div>
+      <div class="pr"><b>390 с.</b><div class="add">+</div></div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="ph"><img src="img/sunflowers.jpg" alt="Подсолнухи, 7 шт"></div>
+    <div class="inf">
+      <div class="nm">Подсолнухи, 7 шт</div>
+      <div class="cmp">Подсолнухи, солидка, крафт-бумага</div>
+      <div class="pr"><b>210 с.</b><div class="add">+</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="cartpill">
+  <div class="l"><span class="cnt">1</span> Корзина</div>
+  <b>450 с. →</b>
+</div>
+<div class="homebar"></div>
+
+</body>
+</html>

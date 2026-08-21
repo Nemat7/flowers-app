@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
+  body { width:390px; height:844px; background:#fff; overflow:hidden; position:relative; }
+  .statusbar { position:absolute; top:0; left:0; right:0; height:54px; z-index:10;
+    display:flex; justify-content:space-between; align-items:center; padding:0 24px;
+    font-size:14px; font-weight:600; color:#191919; }
+  .brand { position:absolute; top:70px; left:28px; z-index:10; font-size:34px; font-weight:800;
+    line-height:1.05; color:#191919; letter-spacing:-0.5px; }
+  /* фото-коллаж как у Uber Eats: тарелки перекрывают друг друга */
+  .collage { position:absolute; top:0; left:0; right:0; height:560px; }
+  .photo { position:absolute; border-radius:50%; overflow:hidden; box-shadow:0 12px 32px rgba(0,0,0,.14); }
+  .photo img { width:100%; height:100%; object-fit:cover; }
+  .p1 { width:330px; height:330px; right:-70px; top:80px; }            /* большая справа сверху */
+  .p2 { width:300px; height:300px; left:-80px; top:250px; }            /* слева */
+  .p3 { width:210px; height:210px; right:20px; top:370px; }            /* справа снизу */
+  .bottom { position:absolute; left:0; right:0; bottom:0; background:#fff;
+    padding:28px 24px 40px; }
+  .bottom h1 { font-size:26px; font-weight:800; line-height:1.2; color:#191919; margin-bottom:24px; }
+  .cta { display:block; width:100%; padding:17px 0; background:#06C167; color:#fff; border:none;
+    border-radius:999px; font-size:16px; font-weight:700; text-align:center; }
+</style>
+</head>
+<body>
+  <div class="statusbar"><span>9:41</span><span>●●●</span></div>
+  <div class="brand">Flowers<br>&amp; Sweets</div>
+  <div class="collage">
+    <div class="photo p1"><img src="../../references/photos/crop/b2.jpg" alt=""></div>
+    <div class="photo p2"><img src="../../references/photos/crop/g1.jpg" alt=""></div>
+    <div class="photo p3"><img src="../../references/photos/crop/b1.jpg" alt=""></div>
+  </div>
+  <div class="bottom">
+    <h1>Добро пожаловать в<br>Flowers &amp; Sweets!</h1>
+    <button class="cta">Продолжить</button>
+  </div>
+</body>
+</html>

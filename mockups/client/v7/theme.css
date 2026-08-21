@@ -1,0 +1,158 @@
+/* ================= Flowers & Sweets · дизайн-система v7 «Ателье» =================
+   Идея: не карточный фудтех, а бутик-мастерская. Тёплая бумага вместо белого,
+   антиква в заголовках, арка (полукруг сверху) как фирменная форма кадра,
+   терракота вместо дежурного зелёного, печать-монограмма на своей продукции. */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --paper:   #FBF8F4;   /* фон приложения — тёплая бумага, не белый */
+  --surface: #FFFFFF;
+  --ink:     #171310;   /* тёплый чёрный */
+  --ink-2:   #6B625A;
+  --ink-3:   #A79C90;
+  --line:    #E7DFD5;
+  --clay:    #C0563E;   /* бренд и главное действие */
+  --clay-2:  #F3E3DC;   /* мягкая подложка бренда */
+  --leaf:    #2E6B52;   /* только статус: открыто / в пути / доставлено */
+  --r:       16px;
+  --r-lg:    24px;
+  --arch:    140px;     /* радиус арки */
+  --shadow:  0 14px 34px rgba(23,19,16,.10);
+  --shadow-s:0 4px 14px rgba(23,19,16,.07);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:390px; }
+body {
+  font-family:'Manrope',-apple-system,'Segoe UI',sans-serif;
+  background:var(--paper); color:var(--ink);
+  -webkit-font-smoothing:antialiased; position:relative; padding-bottom:120px;
+}
+img { display:block; width:100%; height:100%; object-fit:cover; }
+
+/* ---------- типографика ---------- */
+.display { font-family:'Cormorant Garamond',Georgia,serif; font-weight:500; letter-spacing:-.2px; }
+.eyebrow {
+  font-size:10px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-3);
+}
+.muted { color:var(--ink-2); }
+
+/* ---------- статус-бар ---------- */
+.statusbar { height:52px; padding:17px 26px 0; display:flex; justify-content:space-between; align-items:center; }
+.statusbar .time { font-size:15px; font-weight:700; }
+.statusbar .icons { display:flex; gap:6px; align-items:center; }
+
+/* ---------- шапка ---------- */
+.topbar { display:flex; align-items:center; justify-content:space-between; padding:10px 20px 0; }
+.topbar .addr { display:flex; align-items:center; gap:6px; font-size:13.5px; font-weight:600; }
+.topbar .addr small { color:var(--ink-3); font-weight:600; }
+.icon-btn {
+  width:38px; height:38px; border-radius:50%; border:1px solid var(--line); background:var(--surface);
+  display:flex; align-items:center; justify-content:center; position:relative; flex:0 0 auto;
+}
+.icon-btn .dot {
+  position:absolute; top:8px; right:9px; width:7px; height:7px; border-radius:50%;
+  background:var(--clay); border:1.5px solid var(--surface);
+}
+
+/* ---------- заголовок экрана ---------- */
+.title { padding:18px 20px 0; }
+.title h1 { font-size:38px; line-height:1.04; }
+.title h1 i { color:var(--clay); }
+
+/* ---------- поиск ---------- */
+.searchrow { display:flex; gap:9px; padding:16px 20px 0; }
+.search {
+  flex:1; display:flex; align-items:center; gap:10px; background:var(--surface);
+  border:1px solid var(--line); border-radius:999px; padding:13px 18px;
+  font-size:13.5px; color:var(--ink-3); font-weight:500;
+}
+
+/* ---------- секции ---------- */
+.sechead { display:flex; align-items:flex-end; justify-content:space-between; padding:30px 20px 14px; }
+.sechead .l { display:flex; align-items:center; gap:9px; }
+.sechead h2 { font-size:26px; line-height:1; }
+.sechead a { font-size:12px; font-weight:700; color:var(--clay); text-decoration:none; letter-spacing:.02em; }
+.rule { height:1px; background:var(--line); margin:0 20px; }
+
+/* ---------- арка: фирменная форма кадра ---------- */
+.arch { border-radius:var(--arch) var(--arch) var(--r) var(--r); overflow:hidden; position:relative; }
+.arch-b { border-radius:0 0 34px 34px; overflow:hidden; position:relative; }
+
+/* ---------- печать своей продукции ---------- */
+.seal {
+  width:34px; height:34px; border-radius:50%; background:var(--clay); color:#fff;
+  display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+  font-family:'Cormorant Garamond',serif; font-size:14px; font-weight:600; letter-spacing:.02em;
+  box-shadow:0 3px 10px rgba(192,86,62,.35);
+}
+.seal.sm { width:26px; height:26px; font-size:11px; }
+
+/* ---------- чипы и бейджи ---------- */
+.chip {
+  border:1px solid var(--line); background:var(--surface); border-radius:999px;
+  padding:9px 15px; font-size:12.5px; font-weight:600; white-space:nowrap;
+}
+.chip.on { background:var(--ink); border-color:var(--ink); color:#fff; }
+.badge {
+  background:rgba(255,255,255,.94); border-radius:999px; padding:5px 11px;
+  font-size:11px; font-weight:700; display:flex; align-items:center; gap:5px;
+}
+.badge i { width:6px; height:6px; border-radius:50%; background:var(--leaf); display:block; }
+.badge.closed { background:rgba(23,19,16,.82); color:#fff; }
+.badge.closed i { background:var(--ink-3); }
+
+/* ---------- ленты ---------- */
+.rail { display:flex; gap:12px; padding:0 20px; overflow:hidden; }
+
+/* ---------- карточка магазина ---------- */
+.shop { padding:0 20px; }
+.shop + .shop { margin-top:26px; }
+.shop .ph { height:186px; border-radius:var(--r-lg); overflow:hidden; position:relative; }
+.shop .fav {
+  position:absolute; top:12px; right:12px; width:34px; height:34px; border-radius:50%;
+  background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center;
+}
+.shop .tags { position:absolute; left:12px; top:12px; display:flex; gap:6px; }
+.shop .meta { display:flex; align-items:center; gap:11px; margin-top:-22px; padding:0 4px; position:relative; }
+.shop .logo {
+  width:52px; height:52px; border-radius:50%; overflow:hidden; border:3px solid var(--paper);
+  background:var(--surface); flex:0 0 auto;
+}
+.shop .nm { font-size:19px; line-height:1.1; margin-top:20px; }
+.shop .sub { font-size:12.5px; color:var(--ink-2); font-weight:500; margin-top:5px; display:flex; align-items:center; gap:7px; }
+.shop .sub s { width:3px; height:3px; border-radius:50%; background:var(--ink-3); display:block; }
+.shop .rt { margin-left:auto; margin-top:20px; font-size:13px; font-weight:700; }
+
+/* ---------- нижняя навигация ---------- */
+.nav {
+  position:fixed; left:0; right:0; bottom:0; height:88px; z-index:20;
+  background:rgba(251,248,244,.92); backdrop-filter:blur(14px); border-top:1px solid var(--line);
+  display:flex; align-items:flex-start; justify-content:space-around; padding:14px 12px 0;
+}
+.nav .it { display:flex; flex-direction:column; align-items:center; gap:6px; color:var(--ink-3); }
+.nav .it span { font-size:10.5px; font-weight:700; letter-spacing:.02em; }
+.nav .it.on { color:var(--clay); }
+.nav .it .mark { width:5px; height:5px; border-radius:50%; background:var(--clay); }
+.homebar {
+  position:fixed; bottom:8px; left:50%; transform:translateX(-50%);
+  width:134px; height:5px; border-radius:3px; background:var(--ink); z-index:21;
+}
+
+/* ---------- нижняя панель действия ---------- */
+.bottombar {
+  position:fixed; left:0; right:0; bottom:0; z-index:20; padding:14px 20px 30px;
+  background:rgba(251,248,244,.94); backdrop-filter:blur(14px); border-top:1px solid var(--line);
+  display:flex; align-items:center; gap:12px;
+}
+.stepper {
+  flex:0 0 116px; height:54px; border-radius:999px; border:1px solid var(--line); background:var(--surface);
+  display:flex; align-items:center; justify-content:space-between; padding:0 18px; font-size:15px; font-weight:700;
+}
+.stepper span { color:var(--ink-2); font-size:19px; font-weight:500; }
+.cta {
+  flex:1; height:54px; border-radius:999px; background:var(--clay); color:#fff;
+  display:flex; align-items:center; justify-content:center; gap:8px; font-size:14.5px; font-weight:700;
+  box-shadow:0 10px 22px rgba(192,86,62,.28);
+}

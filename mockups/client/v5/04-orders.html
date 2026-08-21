@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>v5 · 04 — Заказы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:390px; height:844px; overflow:hidden; }
+  body {
+    font-family:'Inter',-apple-system,'Segoe UI',sans-serif;
+    background:#FFFFFF; color:#191919; position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  .statusbar { height:54px; padding:18px 28px 0; display:flex; justify-content:space-between; align-items:center; }
+  .statusbar .time { font-size:15px; font-weight:600; letter-spacing:.2px; }
+  .statusbar .icons { display:flex; align-items:center; gap:6px; }
+  /* ---------- header ---------- */
+  .topbar { padding:12px 16px 0; display:flex; align-items:center; justify-content:space-between; }
+  .topbar h1 { font-size:24px; font-weight:800; letter-spacing:-.3px; }
+  .cartbtn {
+    width:46px; height:46px; border-radius:50%; background:#F6F6F6;
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .cartbtn .cnt {
+    position:absolute; top:-3px; right:-3px; width:19px; height:19px; border-radius:50%;
+    background:#06C167; color:#fff; font-size:10.5px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; border:2px solid #fff;
+  }
+  /* ---------- chips ---------- */
+  .chips { display:flex; gap:8px; padding:14px 16px 0; }
+  .chip { border-radius:999px; padding:9px 16px; font-size:13.5px; font-weight:600; background:#F6F6F6; }
+  .chip.on { background:#191919; color:#fff; }
+  /* ---------- groups ---------- */
+  .date { padding:18px 16px 10px; font-size:11.5px; font-weight:700; letter-spacing:.07em; color:#757575; }
+  .order {
+    margin:0 16px 12px; background:#fff; border:1px solid #EFEFEF; border-radius:16px;
+    padding:14px; display:flex; gap:12px; align-items:flex-start;
+  }
+  .ologo { flex:0 0 56px; width:56px; height:56px; border-radius:12px; overflow:hidden; }
+  .ologo img { width:100%; height:100%; object-fit:cover; display:block; }
+  .oinfo { flex:1; min-width:0; }
+  .orow1 { display:flex; justify-content:space-between; align-items:baseline; }
+  .onum { font-size:15px; font-weight:800; letter-spacing:-.1px; }
+  .osum { font-size:15px; font-weight:800; }
+  .oshop { font-size:12.5px; color:#757575; font-weight:500; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .orow2 { display:flex; gap:8px; margin-top:10px; }
+  .status {
+    display:inline-flex; align-items:center; gap:5px; border-radius:999px;
+    padding:6px 12px; font-size:12px; font-weight:700;
+    background:#E5F8EE; color:#06C167;
+  }
+  .details {
+    border-radius:999px; padding:6px 14px; font-size:12px; font-weight:700;
+    background:#191919; color:#fff;
+  }
+  .details.gray { background:#F6F6F6; color:#191919; }
+  /* ---------- tabbar ---------- */
+  .tabbar {
+    position:absolute; left:0; right:0; bottom:18px; z-index:10;
+    display:flex; align-items:center; justify-content:space-between; padding:0 20px;
+  }
+  .tab {
+    width:52px; height:52px; border-radius:999px; background:#fff;
+    display:flex; align-items:center; justify-content:center; gap:7px;
+    box-shadow:0 4px 16px rgba(0,0,0,.10); font-size:13.5px; font-weight:700; color:#191919;
+  }
+  .tab.wide { width:auto; padding:0 18px; }
+  .tab.on { background:#000; color:#fff; }
+  .homebar {
+    position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+    width:134px; height:5px; border-radius:3px; background:#191919; z-index:11;
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="time">9:41</span>
+  <div class="icons">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1" fill="#191919"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#191919"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#191919"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#191919"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#191919"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#191919"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#191919"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#191919" opacity=".4" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#191919"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#191919" opacity=".4"/></svg>
+  </div>
+</div>
+
+<div class="topbar">
+  <h1>Мои заказы</h1>
+  <div class="cartbtn">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M4 7h16l-1.5 11.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5L4 7Z" stroke="#191919" stroke-width="2" stroke-linejoin="round"/><path d="M8.5 10V6a3.5 3.5 0 0 1 7 0v4" stroke="#191919" stroke-width="2" stroke-linecap="round"/></svg>
+    <div class="cnt">1</div>
+  </div>
+</div>
+
+<div class="chips">
+  <div class="chip on">Все</div>
+  <div class="chip">Активные</div>
+  <div class="chip">Завершённые</div>
+</div>
+
+<div class="date">СЕГОДНЯ</div>
+
+<div class="order">
+  <div class="ologo"><img src="../../references/photos/bloom logo.jpg" alt="Bloom"></div>
+  <div class="oinfo">
+    <div class="orow1"><div class="onum">Заказ №F-38035</div><div class="osum">535 с.</div></div>
+    <div class="oshop">Bloom · цветочная мастерская · 2 позиции</div>
+    <div class="orow2">
+      <div class="status">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#06C167"/><path d="m8 12.5 2.5 2.5L16 9.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Курьер в пути
+      </div>
+      <div class="details">Детали</div>
+    </div>
+  </div>
+</div>
+
+<div class="date">10 АВГУСТА</div>
+
+<div class="order">
+  <div class="ologo"><img src="../../references/photos/safia logo.jpg" alt="Safia"></div>
+  <div class="oinfo">
+    <div class="orow1"><div class="onum">Заказ №F-37980</div><div class="osum">130 с.</div></div>
+    <div class="oshop">Safia · магазин десертов · 2 позиции</div>
+    <div class="orow2">
+      <div class="status">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#06C167"/><path d="m8 12.5 2.5 2.5L16 9.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Доставлен
+      </div>
+      <div class="details gray">Детали</div>
+    </div>
+  </div>
+</div>
+
+<div class="order">
+  <div class="ologo"><img src="../../references/photos/logo gulianor.jpg" alt="Guli Anor"></div>
+  <div class="oinfo">
+    <div class="orow1"><div class="onum">Заказ №F-37912</div><div class="osum">450 с.</div></div>
+    <div class="oshop">Guli Anor · цветочный бутик · 1 позиция</div>
+    <div class="orow2">
+      <div class="status">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#06C167"/><path d="m8 12.5 2.5 2.5L16 9.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Доставлен
+      </div>
+      <div class="details gray">Детали</div>
+    </div>
+  </div>
+</div>
+
+<div class="tabbar">
+  <div class="tab"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.5Z" stroke="#757575" stroke-width="2" stroke-linejoin="round"/></svg></div>
+  <div class="tab wide"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#757575" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="#757575" stroke-width="2" stroke-linecap="round"/></svg> Поиск</div>
+  <div class="tab on"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M6 3h12v18l-2-1.5L14 21l-2-1.5L10 21l-2-1.5L6 21V3Z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><path d="M9 8h6M9 12h6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+  <div class="tab"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#757575" stroke-width="2"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" stroke="#757575" stroke-width="2" stroke-linecap="round"/></svg></div>
+</div>
+<div class="homebar"></div>
+
+</body>
+</html>

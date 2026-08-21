@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>v5 · 09 — Отслеживание</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:390px; height:844px; overflow:hidden; }
+  body {
+    font-family:'Inter',-apple-system,'Segoe UI',sans-serif;
+    background:#FFFFFF; color:#191919; position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  .statusbar {
+    height:54px; padding:18px 28px 0; display:flex; justify-content:space-between;
+    align-items:center; position:absolute; top:0; left:0; right:0; z-index:6;
+  }
+  .statusbar .time { font-size:15px; font-weight:600; letter-spacing:.2px; }
+  .statusbar .icons { display:flex; align-items:center; gap:6px; }
+  .titlewrap {
+    position:absolute; top:58px; left:16px; right:16px; z-index:6;
+    display:flex; align-items:center; gap:12px;
+  }
+  .roundbtn {
+    width:38px; height:38px; border-radius:50%; background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 16px rgba(0,0,0,.10); flex:0 0 38px;
+  }
+  .ttl {
+    flex:1; background:#fff; border-radius:999px; padding:10px 14px;
+    box-shadow:0 4px 16px rgba(0,0,0,.10); text-align:center;
+    font-size:14px; font-weight:700;
+  }
+  .ttl span { color:#757575; font-weight:500; font-size:12px; }
+  /* map */
+  .map { height:400px; position:relative; }
+  .map svg { display:block; }
+  /* sheet */
+  .sheet {
+    margin-top:-26px; background:#fff; border-radius:24px 24px 0 0;
+    padding:14px 16px 0; position:relative; z-index:3;
+    box-shadow:0 -6px 24px rgba(0,0,0,.08);
+  }
+  .grab { width:40px; height:4px; border-radius:2px; background:#E0E0E0; margin:0 auto 12px; }
+  .statusrow { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .statusrow .st { font-size:18px; font-weight:800; letter-spacing:-.2px; }
+  .statusrow .eta { font-size:12.5px; color:#757575; margin-top:3px; }
+  .statusrow .eta b { color:#06C167; }
+  .live {
+    background:#E5F8EE; color:#06C167; border-radius:999px; padding:6px 12px;
+    font-size:11.5px; font-weight:800; display:flex; align-items:center; gap:6px;
+    letter-spacing:.05em;
+  }
+  .live i { width:7px; height:7px; border-radius:50%; background:#06C167; }
+  /* timeline */
+  .timeline { border:1px solid #EFEFEF; border-radius:16px; padding:14px 15px 8px; margin-bottom:10px; }
+  .step { display:flex; gap:12px; position:relative; padding-bottom:14px; }
+  .step:last-child { padding-bottom:6px; }
+  .step::before {
+    content:''; position:absolute; left:10px; top:22px; bottom:0; width:2px;
+    background:#EFEFEF;
+  }
+  .step:last-child::before { display:none; }
+  .step.done::before { background:#06C167; }
+  .dot {
+    width:22px; height:22px; border-radius:50%; flex:0 0 22px; z-index:1;
+    display:flex; align-items:center; justify-content:center;
+    background:#EFEFEF; font-size:11px;
+  }
+  .step.done .dot { background:#06C167; color:#fff; }
+  .step.active .dot { background:#191919; box-shadow:0 0 0 4px #F0F0F0; }
+  .step .t { font-size:13.5px; font-weight:700; }
+  .step .s { font-size:11.5px; color:#757575; margin-top:1px; }
+  .step .tm { margin-left:auto; font-size:11.5px; color:#9C9C9C; }
+  .step.active .tm { color:#191919; font-weight:700; }
+  /* courier */
+  .courier {
+    border:1px solid #EFEFEF; border-radius:16px; padding:11px 14px;
+    display:flex; align-items:center; gap:12px; margin-bottom:10px;
+  }
+  .courier .av {
+    width:46px; height:46px; border-radius:50%; flex:0 0 46px;
+    background:#E5F8EE; display:flex; align-items:center; justify-content:center;
+    font-size:19px; font-weight:800; color:#06C167;
+  }
+  .courier .nm { font-size:14.5px; font-weight:700; }
+  .courier .mt { font-size:11.5px; color:#757575; margin-top:2px; }
+  .call {
+    margin-left:auto; width:42px; height:42px; border-radius:50%;
+    background:#06C167; display:flex; align-items:center; justify-content:center;
+  }
+  /* pin */
+  .pin {
+    border:1px solid #EFEFEF; border-radius:16px; padding:12px 15px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .pin .txt { font-size:12px; color:#757575; line-height:1.35; flex:1; }
+  .pin .txt b { color:#191919; font-size:13px; }
+  .digits { display:flex; gap:6px; }
+  .digits i {
+    width:30px; height:36px; border-radius:10px; background:#F6F6F6; color:#191919;
+    display:flex; align-items:center; justify-content:center;
+    font-size:17px; font-weight:800; font-style:normal;
+  }
+  .homebar {
+    position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+    width:134px; height:5px; border-radius:3px; background:#191919; z-index:6;
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="time">9:41</span>
+  <div class="icons">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1" fill="#191919"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#191919"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#191919"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#191919"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#191919"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#191919"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#191919"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#191919" opacity=".4" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#191919"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#191919" opacity=".4"/></svg>
+  </div>
+</div>
+
+<div class="map">
+  <svg width="390" height="400" viewBox="0 0 390 400">
+    <rect width="390" height="400" fill="#EDEEF1"/>
+    <g fill="#E2E4E8">
+      <rect x="0" y="0" width="120" height="90" rx="6"/>
+      <rect x="150" y="0" width="110" height="90" rx="6"/>
+      <rect x="290" y="0" width="100" height="130" rx="6"/>
+      <rect x="0" y="120" width="70" height="120" rx="6"/>
+      <rect x="100" y="120" width="160" height="80" rx="6"/>
+      <rect x="290" y="160" width="100" height="110" rx="6"/>
+      <rect x="100" y="230" width="110" height="110" rx="6"/>
+      <rect x="240" y="300" width="150" height="100" rx="6"/>
+      <rect x="0" y="270" width="70" height="130" rx="6"/>
+    </g>
+    <rect x="150" y="8" width="100" height="74" rx="6" fill="#D8E8DC"/>
+    <text x="200" y="50" font-size="11" fill="#8FAF97" text-anchor="middle" font-family="Inter,sans-serif">парк</text>
+    <g stroke="#FFFFFF" stroke-width="10" stroke-linecap="round">
+      <line x1="0" y1="105" x2="390" y2="105"/>
+      <line x1="0" y1="215" x2="390" y2="215"/>
+      <line x1="85" y1="0" x2="85" y2="400"/>
+      <line x1="275" y1="0" x2="275" y2="400"/>
+      <line x1="0" y1="285" x2="240" y2="285"/>
+    </g>
+    <g stroke="#FFFFFF" stroke-width="4" stroke-linecap="round">
+      <line x1="140" y1="0" x2="140" y2="215"/>
+      <line x1="0" y1="255" x2="85" y2="255"/>
+      <line x1="230" y1="215" x2="230" y2="340"/>
+    </g>
+    <text x="18" y="97" font-size="10" fill="#9AA0A8" font-family="Inter,sans-serif">пр. Рудаки</text>
+    <text x="180" y="207" font-size="10" fill="#9AA0A8" font-family="Inter,sans-serif">ул. Айни</text>
+    <!-- route -->
+    <path d="M85 105 H275 V285 H230" fill="none" stroke="#06C167" stroke-width="3.5"
+      stroke-dasharray="8 7" stroke-linecap="round"/>
+    <!-- shop marker -->
+    <g transform="translate(85,105)">
+      <circle r="15" fill="#191919"/>
+      <circle r="15" fill="none" stroke="#fff" stroke-width="2.5"/>
+      <text y="5" font-size="13" text-anchor="middle">🌸</text>
+    </g>
+    <g transform="translate(85,105)">
+      <rect x="-26" y="24" width="60" height="17" rx="8" fill="#fff"/>
+      <text x="4" y="36" font-size="9.5" fill="#191919" text-anchor="middle" font-family="Inter,sans-serif">Bloom</text>
+    </g>
+    <!-- courier marker -->
+    <g transform="translate(275,250)">
+      <circle r="17" fill="#06C167" stroke="#fff" stroke-width="3"/>
+      <text y="5.5" font-size="14" text-anchor="middle">🛵</text>
+      <circle r="24" fill="none" stroke="#06C167" stroke-width="1.5" opacity=".35"/>
+    </g>
+    <!-- home marker -->
+    <g transform="translate(230,315)">
+      <path d="M0 22 C -14 6 -14 -10 0 -10 C 14 -10 14 6 0 22 Z" fill="#191919" stroke="#fff" stroke-width="2.5"/>
+      <text y="3" font-size="12" text-anchor="middle">🏠</text>
+    </g>
+    <g transform="translate(230,315)">
+      <rect x="-42" y="28" width="84" height="17" rx="8" fill="#fff"/>
+      <text y="40" font-size="9.5" fill="#191919" text-anchor="middle" font-family="Inter,sans-serif">ул. Рудаки 25</text>
+    </g>
+  </svg>
+</div>
+
+<div class="titlewrap">
+  <div class="roundbtn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#191919" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <div class="ttl">Заказ №F-38035 <span>· Bloom</span></div>
+  <div class="roundbtn">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 5a2 2 0 0 1 2-2h2l2 5-2.5 1.5a12 12 0 0 0 5 5L14 12l5 2v2a2 2 0 0 1-2 2A16 16 0 0 1 4 5Z" stroke="#191919" stroke-width="2" stroke-linejoin="round"/></svg>
+  </div>
+</div>
+
+<div class="sheet">
+  <div class="grab"></div>
+  <div class="statusrow">
+    <div>
+      <div class="st">Курьер в пути 🛵</div>
+      <div class="eta">Будет у получателя через <b>~12 минут</b></div>
+    </div>
+    <div class="live"><i></i>LIVE</div>
+  </div>
+
+  <div class="timeline">
+    <div class="step done">
+      <div class="dot">✓</div>
+      <div><div class="t">Принят магазином</div><div class="s">Bloom подтвердил заказ</div></div>
+      <div class="tm">9:14</div>
+    </div>
+    <div class="step done">
+      <div class="dot">✓</div>
+      <div><div class="t">Букет собран</div><div class="s">Фото букета отправлено вам</div></div>
+      <div class="tm">9:32</div>
+    </div>
+    <div class="step active">
+      <div class="dot"></div>
+      <div><div class="t">Курьер в пути</div><div class="s">Едет по пр. Рудаки</div></div>
+      <div class="tm">сейчас</div>
+    </div>
+    <div class="step">
+      <div class="dot"></div>
+      <div><div class="t" style="color:#9C9C9C">Доставлен</div><div class="s">Получатель назовёт PIN-код</div></div>
+    </div>
+  </div>
+
+  <div class="courier">
+    <div class="av">Ф</div>
+    <div>
+      <div class="nm">Фирдавс</div>
+      <div class="mt">Курьер · ★ 4.9 · 340 доставок</div>
+    </div>
+    <div class="call">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 5a2 2 0 0 1 2-2h2l2 5-2.5 1.5a12 12 0 0 0 5 5L14 12l5 2v2a2 2 0 0 1-2 2A16 16 0 0 1 4 5Z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+
+  <div class="pin">
+    <div class="txt"><b>PIN-код получателя</b><br>Сообщите его курьеру при вручении</div>
+    <div class="digits"><i>4</i><i>7</i><i>2</i><i>9</i></div>
+  </div>
+</div>
+
+<div class="homebar"></div>
+
+</body>
+</html>

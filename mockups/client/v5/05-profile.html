@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>v5 · 05 — Профиль</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:390px; height:844px; overflow:hidden; }
+  body {
+    font-family:'Inter',-apple-system,'Segoe UI',sans-serif;
+    background:#FFFFFF; color:#191919; position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  .statusbar { height:54px; padding:18px 28px 0; display:flex; justify-content:space-between; align-items:center; }
+  .statusbar .time { font-size:15px; font-weight:600; letter-spacing:.2px; }
+  .statusbar .icons { display:flex; align-items:center; gap:6px; }
+  /* ---------- head ---------- */
+  .phead { padding:16px 16px 0; display:flex; align-items:flex-start; justify-content:space-between; }
+  .phead h1 { font-size:30px; font-weight:800; letter-spacing:-.5px; line-height:1.15; }
+  .avatar {
+    width:64px; height:64px; border-radius:50%; background:#06C167; color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; font-weight:800; flex:0 0 auto;
+  }
+  /* ---------- tiles ---------- */
+  .tiles { display:flex; gap:10px; padding:20px 16px 0; }
+  .tile {
+    flex:1; background:#F6F6F6; border-radius:16px; padding:16px 14px;
+    font-size:13px; font-weight:700;
+  }
+  .tile .ic { margin-bottom:10px; }
+  /* ---------- list ---------- */
+  .list { padding:14px 16px 0; }
+  .row {
+    display:flex; align-items:center; gap:14px; padding:15px 2px;
+    font-size:15px; font-weight:600;
+  }
+  .row .ric { width:22px; display:flex; justify-content:center; flex:0 0 auto; }
+  .row .val { margin-left:auto; font-size:13.5px; color:#757575; font-weight:500; }
+  .logout { padding:22px 18px 0; font-size:15px; font-weight:600; color:#757575; }
+  /* ---------- tabbar ---------- */
+  .tabbar {
+    position:absolute; left:0; right:0; bottom:18px; z-index:10;
+    display:flex; align-items:center; justify-content:space-between; padding:0 20px;
+  }
+  .tab {
+    width:52px; height:52px; border-radius:999px; background:#fff;
+    display:flex; align-items:center; justify-content:center; gap:7px;
+    box-shadow:0 4px 16px rgba(0,0,0,.10); font-size:13.5px; font-weight:700; color:#191919;
+  }
+  .tab.wide { width:auto; padding:0 18px; }
+  .tab.on { background:#000; color:#fff; }
+  .homebar {
+    position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+    width:134px; height:5px; border-radius:3px; background:#191919; z-index:11;
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="time">9:41</span>
+  <div class="icons">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1" fill="#191919"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#191919"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#191919"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#191919"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#191919"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#191919"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#191919"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#191919" opacity=".4" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#191919"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#191919" opacity=".4"/></svg>
+  </div>
+</div>
+
+<div class="phead">
+  <h1>Неъмат<br>Рахматов</h1>
+  <div class="avatar">НР</div>
+</div>
+
+<div class="tiles">
+  <div class="tile">
+    <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#191919" stroke-width="2" stroke-linejoin="round"/></svg></div>
+    Избранное
+  </div>
+  <div class="tile">
+    <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-5.6-7-11a7 7 0 1 1 14 0c0 5.4-7 11-7 11Z" stroke="#191919" stroke-width="2"/><circle cx="12" cy="10" r="2.6" stroke="#191919" stroke-width="2"/></svg></div>
+    Адреса
+  </div>
+  <div class="tile">
+    <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 3h12v18l-2-1.5L14 21l-2-1.5L10 21l-2-1.5L6 21V3Z" stroke="#191919" stroke-width="2" stroke-linejoin="round"/><path d="M9 8h6M9 12h6" stroke="#191919" stroke-width="2" stroke-linecap="round"/></svg></div>
+    Заказы
+  </div>
+</div>
+
+<div class="list">
+  <div class="row">
+    <div class="ric"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9Z" stroke="#191919" stroke-width="2" stroke-linejoin="round"/><path d="M10 20a2.2 2.2 0 0 0 4 0" stroke="#191919" stroke-width="2" stroke-linecap="round"/></svg></div>
+    Уведомления
+  </div>
+  <div class="row">
+    <div class="ric"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1a2 2 0 0 0 0 4v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1a2 2 0 0 0 0-4V9Z" stroke="#191919" stroke-width="2" stroke-linejoin="round"/><path d="M13 7v2M13 15v2M13 11v2" stroke="#191919" stroke-width="2" stroke-linecap="round"/></svg></div>
+    Промокоды
+  </div>
+  <div class="row">
+    <div class="ric"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#191919" stroke-width="2"/><path d="M9.5 9.3a2.5 2.5 0 1 1 3.4 2.9c-.8.4-.9 1-.9 1.8" stroke="#191919" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.2" fill="#191919"/></svg></div>
+    Помощь
+  </div>
+  <div class="row">
+    <div class="ric"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#191919" stroke-width="2"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z" stroke="#191919" stroke-width="2"/></svg></div>
+    Язык
+    <div class="val">Русский</div>
+  </div>
+  <div class="row">
+    <div class="ric"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#191919" stroke-width="2"/><circle cx="12" cy="8" r="1.2" fill="#191919"/><path d="M12 11.5V17" stroke="#191919" stroke-width="2" stroke-linecap="round"/></svg></div>
+    О приложении
+  </div>
+</div>
+
+<div class="logout">Выйти</div>
+
+<div class="tabbar">
+  <div class="tab"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.5Z" stroke="#757575" stroke-width="2" stroke-linejoin="round"/></svg></div>
+  <div class="tab wide"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#757575" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="#757575" stroke-width="2" stroke-linecap="round"/></svg> Поиск</div>
+  <div class="tab"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M6 3h12v18l-2-1.5L14 21l-2-1.5L10 21l-2-1.5L6 21V3Z" stroke="#757575" stroke-width="2" stroke-linejoin="round"/><path d="M9 8h6M9 12h6" stroke="#757575" stroke-width="2" stroke-linecap="round"/></svg></div>
+  <div class="tab on"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#fff" stroke-width="2"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+</div>
+<div class="homebar"></div>
+
+</body>
+</html>

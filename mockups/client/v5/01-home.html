@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>v5 · 01 — Главная</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:390px; height:844px; overflow:hidden; }
+  body {
+    font-family:'Inter',-apple-system,'Segoe UI',sans-serif;
+    background:#FFFFFF; color:#191919; position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* ---------- status bar ---------- */
+  .statusbar { height:54px; padding:18px 28px 0; display:flex; justify-content:space-between; align-items:center; }
+  .statusbar .time { font-size:15px; font-weight:600; letter-spacing:.2px; }
+  .statusbar .icons { display:flex; align-items:center; gap:6px; }
+  /* ---------- header ---------- */
+  .topbar { padding:10px 16px 0; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .addrpill {
+    flex:1; display:flex; align-items:center; gap:10px; background:#F6F6F6;
+    border-radius:999px; padding:6px 14px 6px 6px;
+  }
+  .addrpill .go {
+    width:38px; height:38px; border-radius:50%; background:#191919; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .addrpill .lab { font-size:10.5px; color:#757575; font-weight:500; }
+  .addrpill .adr { font-size:14px; font-weight:700; margin-top:1px; }
+  .bell {
+    width:50px; height:50px; border-radius:50%; background:#F6F6F6; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .bell .cnt {
+    position:absolute; top:0; right:0; width:18px; height:18px; border-radius:50%;
+    background:#06C167; color:#fff; font-size:10.5px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; border:2px solid #fff;
+  }
+  /* ---------- greeting ---------- */
+  .greet { padding:14px 16px 0; font-size:26px; font-weight:800; letter-spacing:-.4px; line-height:1.15; }
+  /* ---------- search ---------- */
+  .searchrow { padding:14px 16px 0; display:flex; gap:10px; }
+  .search {
+    flex:1; display:flex; align-items:center; gap:10px; background:#F6F6F6;
+    border-radius:999px; padding:13px 16px; font-size:14px; color:#757575; font-weight:500;
+  }
+  .filter {
+    width:48px; height:48px; border-radius:50%; background:#F6F6F6; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+  }
+  /* ---------- banners ---------- */
+  .banners { padding:16px 0 0 16px; display:flex; gap:10px; overflow:hidden; }
+  .banner {
+    flex:0 0 300px; height:108px; border-radius:16px; overflow:hidden; position:relative;
+    color:#fff;
+  }
+  .banner > img { width:100%; height:100%; object-fit:cover; display:block; }
+  .banner::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(100deg, rgba(0,0,0,.62), rgba(0,0,0,.18) 65%, rgba(0,0,0,0));
+  }
+  .banner .bt { position:absolute; left:14px; bottom:12px; z-index:2; }
+  .banner .bt .tag { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#7BE3AE; }
+  .banner .bt h3 { font-size:15px; font-weight:800; margin-top:2px; letter-spacing:-.2px; }
+  .dots { display:flex; gap:5px; justify-content:center; padding:10px 0 0; }
+  .dots i { width:6px; height:6px; border-radius:50%; background:#DEDEDE; }
+  .dots i.on { width:18px; border-radius:3px; background:#06C167; }
+  /* ---------- categories ---------- */
+  .sechead { display:flex; justify-content:space-between; align-items:baseline; padding:14px 16px 10px; }
+  .sechead h2 { font-size:19px; font-weight:800; letter-spacing:-.2px; }
+  .sechead a { font-size:13px; color:#757575; font-weight:600; text-decoration:none; }
+  .cats { display:flex; justify-content:space-between; padding:0 16px; }
+  .cat { width:82px; text-align:center; }
+  .cat .circ { width:70px; height:70px; margin:0 auto; border-radius:50%; overflow:hidden; background:#F6F6F6; }
+  .cat .circ img { width:100%; height:100%; object-fit:cover; display:block; }
+  .cat span { display:block; margin-top:7px; font-size:12px; font-weight:600; }
+  /* ---------- featured products ---------- */
+  .feat { display:flex; gap:12px; padding:0 0 4px 16px; overflow:hidden; }
+  .fcard { flex:0 0 150px; }
+  .fcard .ph { position:relative; height:100px; border-radius:12px; overflow:hidden; }
+  .fcard .ph > img { width:100%; height:100%; object-fit:cover; display:block; }
+  .fcard .brand {
+    position:absolute; left:8px; top:8px; background:#06C167; color:#fff;
+    border-radius:6px; padding:3px 8px; font-size:10px; font-weight:700;
+  }
+  .fcard .fav {
+    position:absolute; top:8px; right:8px; width:28px; height:28px; border-radius:50%;
+    background:rgba(255,255,255,.95); display:flex; align-items:center; justify-content:center;
+  }
+  .fcard .fn { font-size:13.5px; font-weight:700; margin-top:7px; }
+  .fcard .fp { font-size:12.5px; color:#757575; font-weight:500; margin-top:2px; }
+  /* ---------- shops ---------- */
+  .shops { padding:0 16px; display:flex; flex-direction:column; gap:18px; }
+  .shop .ph { position:relative; height:150px; border-radius:12px; overflow:hidden; }
+  .shop .ph > img { width:100%; height:100%; object-fit:cover; display:block; }
+  .shop .fav {
+    position:absolute; top:10px; right:10px; width:32px; height:32px; border-radius:50%;
+    background:rgba(255,255,255,.95); display:flex; align-items:center; justify-content:center;
+  }
+  .shop .own {
+    position:absolute; left:10px; bottom:10px; background:#06C167; color:#fff;
+    border-radius:6px; padding:4px 9px; font-size:11px; font-weight:700;
+  }
+  .shop .row1 { display:flex; justify-content:space-between; align-items:baseline; padding:9px 2px 0; }
+  .shop .nm { font-size:16.5px; font-weight:700; letter-spacing:-.1px; }
+  .shop .rt { font-size:13.5px; font-weight:700; }
+  .shop .row2 { display:flex; justify-content:space-between; padding:3px 2px 0; }
+  .shop .mt { font-size:12.5px; color:#757575; font-weight:500; }
+  .shop .ct { font-size:12.5px; color:#757575; font-weight:500; }
+  /* ---------- floating tabbar ---------- */
+  .tabbar {
+    position:absolute; left:0; right:0; bottom:18px; z-index:10;
+    display:flex; align-items:center; justify-content:space-between; padding:0 20px;
+  }
+  .tab {
+    width:52px; height:52px; border-radius:999px; background:#fff;
+    display:flex; align-items:center; justify-content:center; gap:7px;
+    box-shadow:0 4px 16px rgba(0,0,0,.10); font-size:13.5px; font-weight:700; color:#191919;
+  }
+  .tab.wide { width:auto; padding:0 18px; }
+  .tab.on { background:#000; color:#fff; }
+  .homebar {
+    position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+    width:134px; height:5px; border-radius:3px; background:#191919; z-index:11;
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="time">9:41</span>
+  <div class="icons">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1" fill="#191919"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#191919"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#191919"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#191919"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#191919"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#191919"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#191919"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#191919" opacity=".4" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#191919"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#191919" opacity=".4"/></svg>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="addrpill">
+    <div class="go">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-5.6-7-11a7 7 0 1 1 14 0c0 5.4-7 11-7 11Z" stroke="#fff" stroke-width="2"/><circle cx="12" cy="10" r="2.6" stroke="#fff" stroke-width="2"/></svg>
+    </div>
+    <div>
+      <div class="lab">Доставка</div>
+      <div class="adr">ул. Рудаки 25</div>
+    </div>
+  </div>
+  <div class="bell">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9Z" stroke="#191919" stroke-width="2" stroke-linejoin="round"/><path d="M10 20a2.2 2.2 0 0 0 4 0" stroke="#191919" stroke-width="2" stroke-linecap="round"/></svg>
+    <div class="cnt">1</div>
+  </div>
+</div>
+
+<div class="greet">Что подарим,<br>Неъмат?</div>
+
+<div class="searchrow">
+  <div class="search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#757575" stroke-width="2.2"/><path d="m20 20-3.5-3.5" stroke="#757575" stroke-width="2.2" stroke-linecap="round"/></svg>
+    Найти букет или магазин…
+  </div>
+  <div class="filter">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 7h10M18 7h2M4 17h4M12 17h8" stroke="#191919" stroke-width="2.2" stroke-linecap="round"/><circle cx="16" cy="7" r="2.4" stroke="#191919" stroke-width="2.2"/><circle cx="10" cy="17" r="2.4" stroke="#191919" stroke-width="2.2"/></svg>
+  </div>
+</div>
+
+<div class="banners">
+  <div class="banner">
+    <img src="../../references/photos/crop/g7.jpg" alt="Акция на букеты">
+    <div class="bt"><div class="tag">Акция</div><h3>−20% на первый заказ</h3></div>
+  </div>
+  <div class="banner">
+    <img src="../../references/photos/crop/b6.jpg" alt="Бесплатная доставка">
+    <div class="bt"><div class="tag">Доставка</div><h3>Бесплатно от 300 с.</h3></div>
+  </div>
+</div>
+<div class="dots"><i class="on"></i><i></i><i></i><i></i></div>
+
+<div class="sechead"><h2>Категории</h2></div>
+<div class="cats">
+  <div class="cat"><div class="circ"><img src="../../references/photos/crop/b4.jpg" alt="Букеты"></div><span>Букеты</span></div>
+  <div class="cat"><div class="circ"><img src="../../references/photos/crop/s3.jpg" alt="Сладости"></div><span>Сладости</span></div>
+  <div class="cat"><div class="circ"><img src="../../references/photos/crop/g6.jpg" alt="Открытки"></div><span>Открытки</span></div>
+  <div class="cat"><div class="circ"><img src="../../references/photos/crop/g7.jpg" alt="Поводы"></div><span>Поводы</span></div>
+</div>
+
+<div class="sechead"><h2>Наше фирменное</h2><a href="#">Все →</a></div>
+<div class="feat">
+  <div class="fcard">
+    <div class="ph">
+      <img src="../../references/photos/crop/b2.jpg" alt="Букет «Облако»">
+      <div class="brand">Наш бренд</div>
+      <div class="fav"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#191919" stroke-width="2" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="fn">Букет «Облако»</div>
+    <div class="fp">420 с.</div>
+  </div>
+  <div class="fcard">
+    <div class="ph">
+      <img src="../../references/photos/crop/g2.jpg" alt="25 белых роз">
+      <div class="brand">Наш бренд</div>
+      <div class="fav"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#191919" stroke-width="2" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="fn">25 белых роз</div>
+    <div class="fp">450 с.</div>
+  </div>
+  <div class="fcard">
+    <div class="ph">
+      <img src="../../references/photos/crop/s1.jpg" alt="Кекс с корицей">
+      <div class="brand">Наш бренд</div>
+      <div class="fav"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#191919" stroke-width="2" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="fn">Кекс с корицей</div>
+    <div class="fp">85 с.</div>
+  </div>
+</div>
+
+<div class="sechead"><h2>Магазины рядом</h2><a href="#">Все →</a></div>
+<div class="shops">
+  <div class="shop">
+    <div class="ph">
+      <img src="../../references/photos/crop/b1.jpg" alt="Цветочная мастерская Bloom">
+      <div class="fav"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#191919" stroke-width="2" stroke-linejoin="round"/></svg></div>
+      <div class="own">Наш магазин</div>
+    </div>
+    <div class="row1"><div class="nm">Bloom · цветочная мастерская</div><div class="rt">★ 4.9</div></div>
+    <div class="row2"><div class="mt">35–45 мин · Доставка 15 с.</div><div class="ct">Цветы</div></div>
+  </div>
+  <div class="shop">
+    <div class="ph">
+      <img src="../../references/photos/crop/g1.jpg" alt="Бутик Guli Anor">
+      <div class="fav"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#191919" stroke-width="2" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="row1"><div class="nm">Guli Anor</div><div class="rt">★ 4.8</div></div>
+    <div class="row2"><div class="mt">40–55 мин · Доставка 20 с.</div><div class="ct">Цветы</div></div>
+  </div>
+  <div class="shop">
+    <div class="ph">
+      <img src="../../references/photos/crop/s2.jpg" alt="Магазин десертов Safia">
+      <div class="fav"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#191919" stroke-width="2" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="row1"><div class="nm">Safia</div><div class="rt">★ 4.7</div></div>
+    <div class="row2"><div class="mt">25–40 мин · Доставка 10 с.</div><div class="ct">Сладости</div></div>
+  </div>
+</div>
+
+<div class="tabbar">
+  <div class="tab on"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.5Z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg></div>
+  <div class="tab wide"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#757575" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="#757575" stroke-width="2" stroke-linecap="round"/></svg> Поиск</div>
+  <div class="tab"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M6 3h12v18l-2-1.5L14 21l-2-1.5L10 21l-2-1.5L6 21V3Z" stroke="#757575" stroke-width="2" stroke-linejoin="round"/><path d="M9 8h6M9 12h6" stroke="#757575" stroke-width="2" stroke-linecap="round"/></svg></div>
+  <div class="tab"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#757575" stroke-width="2"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" stroke="#757575" stroke-width="2" stroke-linecap="round"/></svg></div>
+</div>
+<div class="homebar"></div>
+
+</body>
+</html>

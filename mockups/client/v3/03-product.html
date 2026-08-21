@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>v3 · 03 — Товар</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:390px; height:844px; overflow:hidden; }
+  body {
+    font-family:'Manrope',-apple-system,'Segoe UI',sans-serif;
+    background:#FAF7F2; color:#1F1B16; position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* ---------- status bar ---------- */
+  .statusbar {
+    height:54px; padding:18px 28px 0; display:flex; justify-content:space-between;
+    align-items:center;
+  }
+  .statusbar .time { font-size:15px; font-weight:600; letter-spacing:.2px; }
+  .statusbar .icons { display:flex; align-items:center; gap:6px; }
+  /* ---------- nav row ---------- */
+  .navrow { padding:12px 24px 0; display:flex; justify-content:space-between; align-items:center; }
+  .rbtn {
+    width:42px; height:42px; border-radius:50%; background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 8px 24px rgba(31,27,22,.05);
+  }
+  .navtitle { font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#8A8178; }
+  /* ---------- arch photo ---------- */
+  .archwrap { display:flex; justify-content:center; padding:18px 0 0; }
+  .arch {
+    width:250px; height:270px; overflow:hidden;
+    border-radius:125px 125px 24px 24px;
+    box-shadow:0 8px 24px rgba(31,27,22,.07);
+  }
+  .arch img { width:100%; height:100%; object-fit:cover; display:block; }
+  /* ---------- product info ---------- */
+  .pinfo { padding:20px 28px 0; text-align:center; }
+  .shopline { font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#C4718B; }
+  .pinfo h1 {
+    font-family:'Playfair Display',Georgia,serif; font-size:26px; font-weight:700;
+    margin-top:6px; line-height:1.2;
+  }
+  .price { font-size:17px; font-weight:700; color:#C4718B; margin-top:6px; }
+  .comp { font-size:13px; line-height:1.6; color:#8A8178; margin-top:10px; }
+  /* ---------- cross-sell ---------- */
+  .sechead { display:flex; justify-content:space-between; align-items:baseline; padding:20px 24px 10px; }
+  .sechead h2 { font-family:'Playfair Display',Georgia,serif; font-size:17px; font-weight:700; }
+  .sechead a { font-size:12px; color:#C4718B; font-weight:700; text-decoration:none; }
+  .cross { display:flex; gap:12px; padding:0 0 8px 24px; overflow:hidden; }
+  .xcard {
+    flex:0 0 128px; background:#fff; border-radius:20px; overflow:hidden;
+    box-shadow:0 8px 24px rgba(31,27,22,.05);
+  }
+  .xcard .ph { height:82px; overflow:hidden; }
+  .xcard .ph img { width:100%; height:100%; object-fit:cover; display:block; }
+  .xcard .xi { padding:8px 12px 10px; }
+  .xcard .xn { font-size:12px; font-weight:600; line-height:1.3; }
+  .xcard .xp { display:flex; justify-content:space-between; align-items:center; margin-top:5px; }
+  .xcard .xp b { font-size:13px; color:#C4718B; }
+  .xcard .xp .add {
+    width:22px; height:22px; border-radius:50%; background:#E6DFF0; color:#7A6A94;
+    display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600;
+  }
+  /* ---------- CTA ---------- */
+  .cta {
+    position:absolute; left:24px; right:24px; bottom:34px; height:56px;
+    background:#C4718B; border-radius:999px; color:#fff;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    font-size:15.5px; font-weight:700;
+    box-shadow:0 12px 28px rgba(196,113,139,.35);
+  }
+  .cta .dot { width:3px; height:3px; border-radius:50%; background:rgba(255,255,255,.7); }
+  .homebar {
+    position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+    width:134px; height:5px; border-radius:3px; background:#1F1B16;
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="time">9:41</span>
+  <div class="icons">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1" fill="#1F1B16"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#1F1B16"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#1F1B16"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#1F1B16"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#1F1B16"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#1F1B16"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#1F1B16"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#1F1B16" opacity=".4" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#1F1B16"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#1F1B16" opacity=".4"/></svg>
+  </div>
+</div>
+
+<div class="navrow">
+  <div class="rbtn">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#1F1B16" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <div class="navtitle">Магазин «Лотос»</div>
+  <div class="rbtn">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#C4718B" stroke-width="2" stroke-linejoin="round"/></svg>
+  </div>
+</div>
+
+<div class="archwrap">
+  <div class="arch"><img src="../img/roses-red.jpg" alt="25 красных роз «Фридом»"></div>
+</div>
+
+<div class="pinfo">
+  <div class="shopline">Свежая поставка · сегодня</div>
+  <h1>25 роз „Фридом“</h1>
+  <div class="price">450 с.</div>
+  <p class="comp">Роза Фридом Эквадор, 50 см · эвкалипт ·<br>крафтовая упаковка и атласная лента</p>
+</div>
+
+<div class="sechead"><h2>Добавить к букету</h2><a href="#">Ещё</a></div>
+
+<div class="cross">
+  <div class="xcard">
+    <div class="ph"><img src="../img/raffaello.jpg" alt="Raffaello, 150 г"></div>
+    <div class="xi">
+      <div class="xn">Raffaello, 150 г</div>
+      <div class="xp"><b>85 с.</b><div class="add">+</div></div>
+    </div>
+  </div>
+  <div class="xcard">
+    <div class="ph"><img src="../img/honey-cake.jpg" alt="Медовик, кусок"></div>
+    <div class="xi">
+      <div class="xn">Медовик, кусок</div>
+      <div class="xp"><b>45 с.</b><div class="add">+</div></div>
+    </div>
+  </div>
+  <div class="xcard">
+    <div class="ph"><img src="../img/box-flowers.jpg" alt="Открытка ручной работы"></div>
+    <div class="xi">
+      <div class="xn">Открытка handmade</div>
+      <div class="xp"><b>25 с.</b><div class="add">+</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="cta">В корзину <span class="dot"></span> 450 с.</div>
+<div class="homebar"></div>
+
+</body>
+</html>

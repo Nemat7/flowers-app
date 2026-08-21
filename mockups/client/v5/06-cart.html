@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>v5 · 06 — Корзина</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:390px; height:844px; overflow:hidden; }
+  body {
+    font-family:'Inter',-apple-system,'Segoe UI',sans-serif;
+    background:#FFFFFF; color:#191919; position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  .statusbar { height:54px; padding:18px 28px 0; display:flex; justify-content:space-between; align-items:center; }
+  .statusbar .time { font-size:15px; font-weight:600; letter-spacing:.2px; }
+  .statusbar .icons { display:flex; align-items:center; gap:6px; }
+  .topbar { padding:12px 16px 0; display:flex; align-items:center; gap:14px; }
+  .rbtn {
+    width:38px; height:38px; border-radius:50%; background:#fff; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 16px rgba(0,0,0,.10);
+  }
+  .topbar h1 { font-size:22px; font-weight:800; letter-spacing:-.3px; }
+  /* shop */
+  .shoprow { display:flex; align-items:center; gap:11px; padding:18px 16px 0; }
+  .shoprow .logo { width:44px; height:44px; border-radius:12px; overflow:hidden; flex:0 0 auto; }
+  .shoprow .logo img { width:100%; height:100%; object-fit:cover; display:block; }
+  .shoprow .nm { font-size:15px; font-weight:700; }
+  .shoprow .mt { font-size:12px; color:#757575; font-weight:500; margin-top:2px; }
+  /* items */
+  .items { padding:16px 16px 0; display:flex; flex-direction:column; gap:16px; }
+  .item { display:flex; align-items:center; gap:12px; }
+  .item .ph { flex:0 0 64px; width:64px; height:64px; border-radius:12px; overflow:hidden; }
+  .item .ph img { width:100%; height:100%; object-fit:cover; display:block; }
+  .item .inf { flex:1; min-width:0; }
+  .item .nm { font-size:14px; font-weight:600; }
+  .item .pr { font-size:13px; color:#757575; font-weight:500; margin-top:3px; }
+  .stepper {
+    flex:0 0 auto; height:36px; border-radius:999px; background:#F6F6F6;
+    display:flex; align-items:center; gap:14px; padding:0 12px;
+    font-size:14px; font-weight:700;
+  }
+  .stepper span { color:#757575; font-size:17px; font-weight:500; }
+  .more {
+    display:flex; align-items:center; gap:6px; margin:18px 16px 0;
+    font-size:13.5px; font-weight:700; color:#06C167;
+  }
+  /* totals */
+  .totals { margin:22px 16px 0; border-top:1px solid #EFEFEF; padding-top:14px; }
+  .trow { display:flex; justify-content:space-between; font-size:13.5px; padding:3px 0; }
+  .trow span:first-child { color:#757575; }
+  .trow b { font-weight:700; }
+  /* cta */
+  .cta {
+    position:absolute; left:16px; right:16px; bottom:30px; height:54px;
+    background:#000; border-radius:999px; color:#fff;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 22px; font-size:15px; font-weight:700;
+  }
+  .homebar {
+    position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+    width:134px; height:5px; border-radius:3px; background:#191919;
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="time">9:41</span>
+  <div class="icons">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1" fill="#191919"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#191919"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#191919"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#191919"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#191919"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#191919"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#191919"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#191919" opacity=".4" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#191919"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#191919" opacity=".4"/></svg>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="rbtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#191919" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <h1>Корзина</h1>
+</div>
+
+<div class="shoprow">
+  <div class="logo"><img src="../../references/photos/bloom logo.jpg" alt="Bloom"></div>
+  <div>
+    <div class="nm">Bloom · цветочная мастерская</div>
+    <div class="mt">Доставка 35–45 мин</div>
+  </div>
+</div>
+
+<div class="items">
+  <div class="item">
+    <div class="ph"><img src="../../references/photos/crop/b1.jpg" alt="Гортензия с орхидеей"></div>
+    <div class="inf">
+      <div class="nm">Гортензия с орхидеей</div>
+      <div class="pr">450 с.</div>
+    </div>
+    <div class="stepper"><span>−</span> 1 <span>+</span></div>
+  </div>
+  <div class="item">
+    <div class="ph"><img src="../../references/photos/crop/s1.jpg" alt="Кекс с корицей"></div>
+    <div class="inf">
+      <div class="nm">Кекс с корицей</div>
+      <div class="pr">85 с.</div>
+    </div>
+    <div class="stepper"><span>−</span> 1 <span>+</span></div>
+  </div>
+</div>
+
+<div class="more">Добавить ещё <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-6 6 6-6 6" stroke="#06C167" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+<div class="totals">
+  <div class="trow"><span>Товары (2)</span><b>535 с.</b></div>
+  <div class="trow"><span>Доставка</span><span style="color:#757575">рассчитается при оформлении</span></div>
+</div>
+
+<div class="cta"><span>Оформить</span><span>535 с.</span></div>
+<div class="homebar"></div>
+
+</body>
+</html>

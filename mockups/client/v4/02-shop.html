@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>v4 · 02 — Магазин</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:390px; height:844px; overflow:hidden; }
+  body {
+    font-family:'Inter',-apple-system,'Segoe UI',sans-serif;
+    background:#FFFFFF; color:#191919; position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* ---------- status bar (over hero) ---------- */
+  .statusbar {
+    height:54px; padding:18px 28px 0; display:flex; justify-content:space-between;
+    align-items:center; position:relative; z-index:3;
+  }
+  .statusbar .time { font-size:15px; font-weight:600; letter-spacing:.2px; }
+  .statusbar .icons { display:flex; align-items:center; gap:6px; }
+  /* ---------- hero ---------- */
+  .hero { position:relative; height:196px; margin-top:-54px; }
+  .hero > img { width:100%; height:100%; object-fit:cover; display:block; }
+  .hero::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,0) 45%);
+  }
+  .heronav { position:absolute; top:60px; left:16px; right:16px; display:flex; justify-content:space-between; z-index:4; }
+  .rbtn {
+    width:36px; height:36px; border-radius:50%; background:#fff;
+    display:flex; align-items:center; justify-content:center;
+  }
+  /* ---------- shop info ---------- */
+  .shopinfo { padding:16px 16px 0; }
+  .shopinfo h1 { font-size:24px; font-weight:800; letter-spacing:-.3px; }
+  .meta { font-size:13px; color:#757575; font-weight:500; margin-top:5px; }
+  .meta .star { color:#191919; font-weight:700; }
+  .deliv { display:flex; gap:8px; margin-top:10px; }
+  .dpill {
+    background:#F6F6F6; border-radius:999px; padding:6px 12px;
+    font-size:12px; font-weight:600;
+  }
+  .dpill.green { color:#06C167; }
+  /* ---------- category chips ---------- */
+  .chips { display:flex; gap:8px; padding:14px 0 0 16px; overflow:hidden; }
+  .chip {
+    flex:0 0 auto; border-radius:999px; padding:8px 15px; font-size:13px; font-weight:600;
+    background:#F6F6F6; color:#191919;
+  }
+  .chip.on { background:#191919; color:#fff; }
+  /* ---------- product grid ---------- */
+  .sechead { padding:16px 16px 10px; font-size:17px; font-weight:800; letter-spacing:-.2px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px 14px; padding:0 16px; }
+  .prod .ph { position:relative; height:104px; border-radius:12px; overflow:hidden; }
+  .prod .ph > img { width:100%; height:100%; object-fit:cover; display:block; }
+  .prod .add {
+    position:absolute; right:8px; bottom:8px; width:30px; height:30px; border-radius:50%;
+    background:#191919; color:#fff; display:flex; align-items:center; justify-content:center;
+    font-size:17px; font-weight:500;
+  }
+  .prod .pn { font-size:13.5px; font-weight:600; margin-top:7px; line-height:1.3; }
+  .prod .pp { font-size:13px; color:#757575; font-weight:500; margin-top:2px; }
+  /* ---------- floating cart ---------- */
+  .cartpill {
+    position:absolute; left:16px; right:16px; bottom:34px; height:52px;
+    background:#000; border-radius:999px; color:#fff; z-index:5;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 20px; font-size:14.5px; font-weight:700;
+    box-shadow:0 10px 26px rgba(0,0,0,.28);
+  }
+  .cartpill .left { display:flex; align-items:center; gap:8px; }
+  .cartpill .n {
+    width:22px; height:22px; border-radius:50%; background:#06C167;
+    display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;
+  }
+  .homebar {
+    position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+    width:134px; height:5px; border-radius:3px; background:#191919; z-index:6;
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="time" style="color:#fff">9:41</span>
+  <div class="icons">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1" fill="#fff"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#fff"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#fff"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#fff"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#fff"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#fff"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#fff"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#fff" opacity=".5" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#fff"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#fff" opacity=".5"/></svg>
+  </div>
+</div>
+
+
+<div class="hero">
+  <img src="../img/mixed-bouquet.jpg" alt="Цветочный магазин «Флора»">
+</div>
+<div class="heronav">
+  <div class="rbtn">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#191919" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <div class="rbtn">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#191919" stroke-width="2.2"/><path d="m20 20-3.5-3.5" stroke="#191919" stroke-width="2.2" stroke-linecap="round"/></svg>
+  </div>
+</div>
+
+<div class="shopinfo">
+  <h1>Флора</h1>
+  <div class="meta"><span class="star">★ 4.8</span> (200+) · Цветы · 40–55 мин · <b>Доставка 20 с.</b></div>
+  <div class="deliv">
+    <div class="dpill green">−20% на розы сегодня</div>
+    <div class="dpill">Открыто до 22:00</div>
+  </div>
+</div>
+
+<div class="chips">
+  <div class="chip on">Популярное</div>
+  <div class="chip">Розы</div>
+  <div class="chip">Тюльпаны</div>
+  <div class="chip">Композиции</div>
+  <div class="chip">В коробке</div>
+</div>
+
+<div class="sechead">Популярное</div>
+
+<div class="grid">
+  <div class="prod">
+    <div class="ph"><img src="../img/roses-red.jpg" alt="25 роз «Фридом»"><div class="add">+</div></div>
+    <div class="pn">25 роз «Фридом»</div>
+    <div class="pp">450 с.</div>
+  </div>
+  <div class="prod">
+    <div class="ph"><img src="../img/peonies.jpg" alt="Пионы «Сара Бернар»"><div class="add">+</div></div>
+    <div class="pn">Пионы «Сара Бернар»</div>
+    <div class="pp">520 с.</div>
+  </div>
+  <div class="prod">
+    <div class="ph"><img src="../img/tulips.jpg" alt="Тюльпаны, 15 шт"><div class="add">+</div></div>
+    <div class="pn">Тюльпаны, 15 шт</div>
+    <div class="pp">280 с.</div>
+  </div>
+  <div class="prod">
+    <div class="ph"><img src="../img/sunflowers.jpg" alt="Подсолнухи, 7 шт"><div class="add">+</div></div>
+    <div class="pn">Подсолнухи, 7 шт</div>
+    <div class="pp">230 с.</div>
+  </div>
+</div>
+
+<div class="cartpill">
+  <div class="left"><div class="n">1</div> Корзина</div>
+  <div>450 с.</div>
+</div>
+<div class="homebar"></div>
+
+</body>
+</html>

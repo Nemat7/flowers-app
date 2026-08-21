@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>v5 · 03 — Товар</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:390px; height:844px; overflow:hidden; }
+  body {
+    font-family:'Inter',-apple-system,'Segoe UI',sans-serif;
+    background:#FFFFFF; color:#191919; position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  .statusbar { height:54px; padding:18px 28px 0; display:flex; justify-content:space-between; align-items:center; position:absolute; top:0; left:0; right:0; z-index:5; }
+  .statusbar .time { font-size:15px; font-weight:600; letter-spacing:.2px; }
+  .statusbar .icons { display:flex; align-items:center; gap:6px; }
+  /* ---------- full-bleed photo ---------- */
+  .photo { position:relative; height:464px; }
+  .photo > img { width:100%; height:100%; object-fit:cover; display:block; }
+  .photo::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,.30), rgba(0,0,0,0) 35%);
+  }
+  .photonav { position:absolute; top:62px; left:16px; right:16px; display:flex; justify-content:space-between; z-index:6; }
+  .rbtn { width:38px; height:38px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,.10); }
+  /* ---------- sheet ---------- */
+  .sheet {
+    position:relative; z-index:2; margin-top:-28px; background:#fff;
+    border-radius:24px 24px 0 0; padding:20px 16px 130px;
+  }
+  .sheet h1 { font-size:22px; font-weight:800; letter-spacing:-.3px; line-height:1.2; }
+  .price { font-size:17px; font-weight:800; margin-top:6px; }
+  .desc { font-size:13.5px; line-height:1.55; color:#757575; margin-top:8px; }
+  .sechead { padding:20px 0 10px; font-size:16px; font-weight:800; letter-spacing:-.2px; }
+  .cross { display:flex; gap:12px; overflow:hidden; }
+  .xcard { flex:0 0 158px; display:flex; align-items:center; gap:10px; }
+  .xcard .ph { position:relative; flex:0 0 68px; height:68px; border-radius:12px; overflow:hidden; }
+  .xcard .ph img { width:100%; height:100%; object-fit:cover; display:block; }
+  .xcard .xi { flex:1; min-width:0; }
+  .xcard .xn { font-size:12.5px; font-weight:600; line-height:1.3; }
+  .xcard .xp { font-size:12px; color:#757575; font-weight:500; margin-top:3px; }
+  .xcard .add {
+    flex:0 0 28px; width:28px; height:28px; border-radius:50%; background:#191919; color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:500;
+  }
+  /* ---------- fixed bottom panel ---------- */
+  .bottombar {
+    position:absolute; left:0; right:0; bottom:0; background:#fff; z-index:8;
+    border-top:1px solid #EFEFEF;
+    display:flex; align-items:center; gap:12px; padding:14px 16px 30px;
+  }
+  .stepper {
+    flex:0 0 118px; height:50px; border-radius:999px; background:#F6F6F6;
+    display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+    font-size:16px; font-weight:700;
+  }
+  .stepper span { color:#757575; font-size:20px; font-weight:500; }
+  .cta {
+    flex:1; height:50px; border-radius:999px; background:#000; color:#fff;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    font-size:14.5px; font-weight:700;
+  }
+  .homebar {
+    position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+    width:134px; height:5px; border-radius:3px; background:#191919; z-index:11;
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="time" style="color:#fff">9:41</span>
+  <div class="icons">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1" fill="#fff"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#fff"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#fff"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#fff"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#fff"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#fff"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#fff"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#fff" opacity=".5" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#fff"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#fff" opacity=".5"/></svg>
+  </div>
+</div>
+
+<div class="photo">
+  <img src="../../references/photos/crop/b1.jpg" alt="Гортензия с орхидеей">
+</div>
+<div class="photonav">
+  <div class="rbtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#191919" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="rbtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#191919" stroke-width="2" stroke-linejoin="round"/></svg></div>
+</div>
+
+<div class="sheet">
+  <h1>Гортензия с орхидеей</h1>
+  <div class="price">450 с.</div>
+  <p class="desc">Голубая гортензия, белая орхидея фаленопсис, фирменная лента Bloom и крафтовая упаковка. Собираем за 20 минут после заказа. Магазин «Bloom».</p>
+
+  <div class="sechead">Добавить к заказу</div>
+  <div class="cross">
+    <div class="xcard">
+      <div class="ph"><img src="../../references/photos/crop/s1.jpg" alt="Кекс с корицей"></div>
+      <div class="xi"><div class="xn">Кекс с корицей</div><div class="xp">85 с.</div></div>
+      <div class="add">+</div>
+    </div>
+    <div class="xcard">
+      <div class="ph"><img src="../../references/photos/crop/s2.jpg" alt="Десерт Safia"></div>
+      <div class="xi"><div class="xn">Десерт Safia</div><div class="xp">45 с.</div></div>
+      <div class="add">+</div>
+    </div>
+    <div class="xcard">
+      <div class="ph"><img src="../../references/photos/crop/g6.jpg" alt="Открытка handmade"></div>
+      <div class="xi"><div class="xn">Открытка handmade</div><div class="xp">25 с.</div></div>
+      <div class="add">+</div>
+    </div>
+  </div>
+</div>
+
+<div class="bottombar">
+  <div class="stepper"><span>−</span> 1 <span>+</span></div>
+  <div class="cta">В корзину · 450 с.</div>
+</div>
+<div class="homebar"></div>
+
+</body>
+</html>

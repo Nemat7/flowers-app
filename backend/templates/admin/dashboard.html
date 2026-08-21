@@ -1,0 +1,130 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .dash-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 16px 0 24px;
+  }
+  .dash-card {
+    background: var(--body-bg, #fff);
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .dash-card .dash-label {
+    color: var(--body-quiet-color, #666);
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  .dash-card .dash-value {
+    font-size: 26px;
+    font-weight: 700;
+  }
+  .dash-section {
+    margin-bottom: 28px;
+  }
+  .dash-section h2 {
+    font-size: 16px;
+    margin: 0 0 8px;
+  }
+  table.dash-table {
+    border-collapse: collapse;
+    min-width: 320px;
+  }
+  table.dash-table th, table.dash-table td {
+    border: 1px solid var(--border-color, #ddd);
+    padding: 6px 14px;
+    text-align: left;
+  }
+  table.dash-table th {
+    background: var(--darkened-bg, #f5f5f5);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+
+  <div class="dash-section">
+    <h2>Сегодня</h2>
+    <div class="dash-cards">
+      <div class="dash-card">
+        <div class="dash-label">Заказы сегодня</div>
+        <div class="dash-value">{{ m.today.orders }}</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-label">GMV сегодня</div>
+        <div class="dash-value">{{ m.today.gmv }} с.</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-label">Выручка платформы сегодня</div>
+        <div class="dash-value">{{ m.today.revenue }} с.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-section">
+    <h2>Текущий месяц</h2>
+    <div class="dash-cards">
+      <div class="dash-card">
+        <div class="dash-label">Заказы за месяц</div>
+        <div class="dash-value">{{ m.month.orders }}</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-label">GMV за месяц</div>
+        <div class="dash-value">{{ m.month.gmv }} с.</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-label">Выручка платформы за месяц</div>
+        <div class="dash-value">{{ m.month.revenue }} с.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-section">
+    <h2>Оперативно</h2>
+    <div class="dash-cards">
+      <div class="dash-card">
+        <div class="dash-label">Активные заказы</div>
+        <div class="dash-value">{{ m.active_orders.total }}</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-label">Магазины (approved / всего)</div>
+        <div class="dash-value">{{ m.shops.approved }} / {{ m.shops.total }}</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-label">Курьеры на линии</div>
+        <div class="dash-value">{{ m.couriers_online }}</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-label">Открытые споры</div>
+        <div class="dash-value">{{ m.open_disputes }}</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-label">Таймауты магазинов сегодня</div>
+        <div class="dash-value">{{ m.shop_timeouts_today }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-section">
+    <h2>Активные заказы по статусам</h2>
+    {% if active_rows %}
+      <table class="dash-table">
+        <tr><th>Статус</th><th>Кол-во</th></tr>
+        {% for row in active_rows %}
+          <tr><td>{{ row.label }}</td><td>{{ row.count }}</td></tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p>Активных заказов нет.</p>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

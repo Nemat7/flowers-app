@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>v6 · 03 — Товар</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#14120F; --ink-2:#6E6A66; --ink-3:#A39E98;
+    --cream:#F7F4F0; --line:#ECE7E1;
+    --brand:#C6425A; --live:#06A66B;
+    --radius-lg:24px; --radius-md:18px;
+    --shadow:0 10px 30px rgba(20,18,15,.10);
+    --shadow-sm:0 4px 14px rgba(20,18,15,.07);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:390px; }
+  body {
+    font-family:'Inter',-apple-system,'Segoe UI',sans-serif;
+    background:#fff; color:var(--ink); position:relative;
+    padding-bottom:116px; -webkit-font-smoothing:antialiased;
+  }
+  h1 { font-family:'Playfair Display',Georgia,serif; }
+
+  .statusbar { height:54px; padding:18px 28px 0; display:flex; justify-content:space-between; align-items:center; position:absolute; top:0; left:0; right:0; z-index:6; }
+  .statusbar .time { font-size:15px; font-weight:600; letter-spacing:.2px; color:#fff; }
+  .statusbar .icons { display:flex; align-items:center; gap:6px; }
+
+  /* ---------- фото-галерея ---------- */
+  .photo { position:relative; height:470px; }
+  .photo > img { width:100%; height:100%; object-fit:cover; display:block; }
+  .photo::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,.34), rgba(0,0,0,0) 32%);
+  }
+  .photonav { position:absolute; top:60px; left:16px; right:16px; display:flex; justify-content:space-between; z-index:7; }
+  .rbtn {
+    width:42px; height:42px; border-radius:50%; background:rgba(255,255,255,.92);
+    backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center;
+    box-shadow:var(--shadow-sm);
+  }
+  .dots { position:absolute; left:0; right:0; bottom:52px; display:flex; gap:5px; justify-content:center; z-index:7; }
+  .dots i { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.55); }
+  .dots i.on { width:20px; border-radius:3px; background:#fff; }
+
+  /* ---------- лист ---------- */
+  .sheet {
+    position:relative; z-index:2; margin-top:-32px; background:#fff;
+    border-radius:28px 28px 0 0; padding:24px 16px 0;
+  }
+  .brandline { display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink-2); font-weight:600; }
+  .brandline .logo { width:22px; height:22px; border-radius:50%; object-fit:cover; }
+  .brandline .rate { color:var(--ink); font-weight:700; }
+  h1 { font-size:27px; font-weight:600; line-height:1.16; letter-spacing:-.4px; margin-top:9px; }
+  .pricerow { display:flex; align-items:baseline; gap:9px; margin-top:10px; }
+  .price { font-size:23px; font-weight:800; letter-spacing:-.4px; }
+  .price-note { font-size:12.5px; color:var(--ink-2); font-weight:500; }
+  .desc { font-size:14px; line-height:1.6; color:var(--ink-2); margin-top:12px; }
+
+  /* ---------- размер ---------- */
+  .sub { font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin:24px 0 11px; }
+  .sizes { display:flex; gap:9px; }
+  .size {
+    flex:1; border:1.5px solid var(--line); border-radius:16px; padding:11px 8px; text-align:center;
+  }
+  .size.on { border-color:var(--ink); background:var(--ink); color:#fff; }
+  .size b { display:block; font-size:13.5px; font-weight:700; }
+  .size span { display:block; font-size:11.5px; color:var(--ink-2); margin-top:2px; }
+  .size.on span { color:rgba(255,255,255,.7); }
+
+  /* ---------- состав ---------- */
+  .comp { display:flex; flex-wrap:wrap; gap:7px; }
+  .comp b {
+    background:var(--cream); border-radius:999px; padding:8px 13px;
+    font-size:12.5px; font-weight:600; color:var(--ink);
+  }
+
+  /* ---------- доставка ---------- */
+  .delivery {
+    display:flex; align-items:center; gap:12px; background:var(--cream);
+    border-radius:var(--radius-md); padding:14px; margin-top:24px;
+  }
+  .delivery .ic { width:38px; height:38px; border-radius:12px; background:#fff; display:flex; align-items:center; justify-content:center; flex:0 0 auto; }
+  .delivery .t1 { font-size:13.5px; font-weight:700; }
+  .delivery .t2 { font-size:12px; color:var(--ink-2); margin-top:2px; }
+  .delivery a { margin-left:auto; flex:0 0 auto; font-size:12.5px; font-weight:700; color:var(--brand); text-decoration:none; }
+
+  /* ---------- открытка ---------- */
+  .card-note {
+    margin-top:12px; border:1.5px dashed var(--line); border-radius:var(--radius-md);
+    padding:15px 16px; display:flex; align-items:center; gap:13px;
+  }
+  .card-note .hand { font-family:'Playfair Display',serif; font-style:italic; font-size:15px; color:var(--ink-2); line-height:1.35; }
+  .card-note .plus {
+    margin-left:auto; flex:0 0 32px; width:32px; height:32px; border-radius:50%; background:var(--ink);
+    color:#fff; display:flex; align-items:center; justify-content:center; font-size:19px; font-weight:400;
+  }
+  .free { font-size:10.5px; font-weight:700; color:var(--live); letter-spacing:.04em; text-transform:uppercase; }
+
+  /* ---------- дополнить ---------- */
+  .cross { display:flex; gap:11px; overflow:hidden; }
+  .xcard { flex:0 0 132px; }
+  .xcard .ph { position:relative; height:112px; border-radius:16px; overflow:hidden; }
+  .xcard .ph img { width:100%; height:100%; object-fit:cover; display:block; }
+  .xcard .add {
+    position:absolute; right:7px; bottom:7px; width:30px; height:30px; border-radius:50%;
+    background:#fff; color:var(--ink); display:flex; align-items:center; justify-content:center;
+    font-size:18px; box-shadow:var(--shadow-sm);
+  }
+  .xcard .xn { font-size:13px; font-weight:600; margin-top:8px; }
+  .xcard .xp { font-size:12.5px; color:var(--ink-2); font-weight:500; margin-top:2px; }
+
+  /* ---------- отзывы ---------- */
+  .rev { border-top:1px solid var(--line); margin-top:26px; padding-top:20px; }
+  .rev .head { display:flex; align-items:center; justify-content:space-between; }
+  .rev .big { font-size:21px; font-weight:800; letter-spacing:-.3px; display:flex; align-items:center; gap:7px; }
+  .rev .cnt { font-size:12.5px; color:var(--ink-2); font-weight:500; }
+  .rev .q { font-size:13.5px; line-height:1.55; color:var(--ink); margin-top:13px; }
+  .rev .who { font-size:12px; color:var(--ink-3); margin-top:6px; font-weight:500; }
+
+  /* ---------- нижняя панель ---------- */
+  .bottombar {
+    position:fixed; left:0; right:0; bottom:0; background:rgba(255,255,255,.92);
+    backdrop-filter:blur(16px); border-top:1px solid var(--line); z-index:8;
+    display:flex; align-items:center; gap:12px; padding:14px 16px 30px;
+  }
+  .stepper {
+    flex:0 0 112px; height:54px; border-radius:999px; background:var(--cream);
+    display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+    font-size:16px; font-weight:700;
+  }
+  .stepper span { color:var(--ink-2); font-size:20px; font-weight:500; }
+  .cta {
+    flex:1; height:54px; border-radius:999px; background:var(--ink); color:#fff;
+    display:flex; align-items:center; justify-content:center; gap:9px;
+    font-size:15px; font-weight:700;
+  }
+  .homebar {
+    position:fixed; bottom:8px; left:50%; transform:translateX(-50%);
+    width:134px; height:5px; border-radius:3px; background:var(--ink); z-index:11;
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="time">9:41</span>
+  <div class="icons">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1" fill="#fff"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#fff"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#fff"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#fff"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#fff"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#fff"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#fff"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#fff" opacity=".5" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#fff"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#fff" opacity=".5"/></svg>
+  </div>
+</div>
+
+<div class="photo">
+  <img src="../../references/photos/crop/b1.jpg" alt="Гортензия с орхидеей">
+  <div class="dots"><i class="on"></i><i></i><i></i><i></i></div>
+</div>
+<div class="photonav">
+  <div class="rbtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#14120F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="rbtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#14120F" stroke-width="2" stroke-linejoin="round"/></svg></div>
+</div>
+
+<div class="sheet">
+  <div class="brandline">
+    <img class="logo" src="../../references/photos/crop/b3.jpg" alt="">
+    Bloom · цветочная мастерская
+    <span class="rate">★ 4.9</span>
+  </div>
+
+  <h1>Гортензия с орхидеей</h1>
+
+  <div class="pricerow">
+    <div class="price">450 с.</div>
+    <div class="price-note">средний размер · 35–40 см</div>
+  </div>
+
+  <p class="desc">Голубая гортензия, белая орхидея фаленопсис, фирменная лента Bloom и крафтовая упаковка. Собираем вручную за 20 минут после заказа.</p>
+
+  <div class="sub">Размер букета</div>
+  <div class="sizes">
+    <div class="size"><b>S</b><span>350 с.</span></div>
+    <div class="size on"><b>M</b><span>450 с.</span></div>
+    <div class="size"><b>L</b><span>620 с.</span></div>
+  </div>
+
+  <div class="sub">Состав</div>
+  <div class="comp">
+    <b>Гортензия · 5</b><b>Орхидея · 3</b><b>Эвкалипт</b><b>Крафт</b><b>Лента Bloom</b>
+  </div>
+
+  <div class="delivery">
+    <div class="ic">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#14120F" stroke-width="2"/><path d="M12 7v5.4l3.4 2" stroke="#14120F" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <div>
+      <div class="t1">Привезём сегодня к 18:00</div>
+      <div class="t2">Курьер платформы · 15 с.</div>
+    </div>
+    <a href="#">Изменить</a>
+  </div>
+
+  <div class="card-note">
+    <div>
+      <div class="free">Открытка бесплатно</div>
+      <div class="hand">«С днём рождения, родная!..»</div>
+    </div>
+    <div class="plus">+</div>
+  </div>
+
+  <div class="sub">Дополнить подарок</div>
+  <div class="cross">
+    <div class="xcard">
+      <div class="ph"><img src="../../references/photos/crop/s1.jpg" alt=""><div class="add">+</div></div>
+      <div class="xn">Кекс с корицей</div>
+      <div class="xp">85 с.</div>
+    </div>
+    <div class="xcard">
+      <div class="ph"><img src="../../references/photos/crop/s2.jpg" alt=""><div class="add">+</div></div>
+      <div class="xn">Десерт Safia</div>
+      <div class="xp">45 с.</div>
+    </div>
+    <div class="xcard">
+      <div class="ph"><img src="../../references/photos/crop/g6.jpg" alt=""><div class="add">+</div></div>
+      <div class="xn">Шары</div>
+      <div class="xp">60 с.</div>
+    </div>
+  </div>
+
+  <div class="rev">
+    <div class="head">
+      <div class="big">★ 4.9 <span class="cnt">· 214 отзыва</span></div>
+      <a href="#" style="font-size:12.5px;font-weight:700;color:#C6425A;text-decoration:none">Все</a>
+    </div>
+    <div class="q">«Букет один в один как на фото, привезли раньше срока. Сестра расплакалась 🙂»</div>
+    <div class="who">Мадина · 3 дня назад</div>
+  </div>
+</div>
+
+<div class="bottombar">
+  <div class="stepper"><span>−</span> 1 <span>+</span></div>
+  <div class="cta">В корзину · 450 с.</div>
+</div>
+<div class="homebar"></div>
+
+</body>
+</html>

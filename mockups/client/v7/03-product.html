@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>v7 · 03 — Товар</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+  .hero { height:452px; position:relative; }
+  .nav-btns { position:absolute; top:58px; left:20px; right:20px; display:flex; justify-content:space-between; z-index:4; }
+  .rbtn {
+    width:42px; height:42px; border-radius:50%; background:rgba(251,248,244,.94);
+    display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-s);
+  }
+  .hero .dots { position:absolute; left:0; right:0; bottom:26px; display:flex; gap:5px; justify-content:center; z-index:4; }
+  .hero .dots i { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.5); }
+  .hero .dots i.on { width:20px; border-radius:3px; background:#fff; }
+  .hero .seal { position:absolute; left:20px; bottom:66px; z-index:4; width:44px; height:44px; font-size:17px; }
+
+  .body { padding:22px 20px 0; }
+  .brandline { display:flex; align-items:center; gap:9px; font-size:12.5px; font-weight:600; color:var(--ink-2); }
+  .brandline .lg { width:26px; height:26px; border-radius:50%; overflow:hidden; flex:0 0 auto; }
+  .brandline b { margin-left:auto; color:var(--ink); }
+  h1 { font-size:34px; line-height:1.06; margin-top:14px; }
+  .price { display:flex; align-items:baseline; gap:10px; margin-top:12px; }
+  .price .v { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:600; }
+  .price .n { font-size:12.5px; color:var(--ink-2); font-weight:500; }
+  .desc { font-size:14px; line-height:1.65; color:var(--ink-2); margin-top:14px; }
+
+  .sub { margin:26px 0 12px; }
+  .comp { display:flex; flex-wrap:wrap; gap:8px; }
+  .comp b { border:1px solid var(--line); border-radius:999px; padding:8px 14px; font-size:12.5px; font-weight:600; background:var(--surface); }
+
+  .note { display:flex; align-items:center; gap:13px; background:var(--clay-2); border-radius:var(--r-lg); padding:16px; margin-top:26px; }
+  .note .t1 { font-size:13.5px; font-weight:700; }
+  .note .t2 { font-size:12px; color:var(--ink-2); margin-top:3px; }
+
+  .x { flex:0 0 128px; }
+  .x .ph { height:150px; }
+  .x .ph .add {
+    position:absolute; right:8px; bottom:8px; width:30px; height:30px; border-radius:50%;
+    background:var(--paper); display:flex; align-items:center; justify-content:center;
+    font-size:19px; font-weight:500; box-shadow:var(--shadow-s);
+  }
+  .x .xn { font-size:14.5px; line-height:1.15; margin-top:10px; }
+  .x .xp { font-size:12.5px; font-weight:700; margin-top:4px; }
+</style>
+</head>
+<body>
+
+<div class="hero arch-b">
+  <img src="../../references/photos/crop/b1.jpg" alt="">
+  <div class="dots"><i class="on"></i><i></i><i></i><i></i></div>
+  <div class="seal">F</div>
+</div>
+<div class="nav-btns">
+    <div class="rbtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#171310" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="rbtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#171310" stroke-width="2" stroke-linejoin="round"/></svg></div>
+</div>
+
+<div class="body">
+  <div class="brandline">
+    <div class="lg"><img src="../../references/photos/bloom logo.jpg" alt=""></div>
+    Bloom · цветочная мастерская
+    <b>★ 4.9</b>
+  </div>
+
+  <h1 class="display">Гортензия<br>с орхидеей</h1>
+
+  <div class="price">
+    <div class="v">450 с.</div>
+    <div class="n">соберут за 20 минут · доставим к 18:00</div>
+  </div>
+
+  <p class="desc">Голубая гортензия, белая орхидея фаленопсис, фирменная лента и крафтовая упаковка. Собираем вручную в день заказа.</p>
+
+  <div class="eyebrow sub">Состав</div>
+  <div class="comp"><b>Гортензия · 5</b><b>Орхидея · 3</b><b>Эвкалипт</b><b>Крафт</b></div>
+
+  <div class="note">
+    <div class="seal">✎</div>
+    <div>
+      <div class="t1">Открытка с вашими словами</div>
+      <div class="t2">Напишем от руки и вложим — бесплатно</div>
+    </div>
+  </div>
+</div>
+
+<div class="sechead" style="padding-bottom:12px"><div class="l"><h2 class="display">Дополнить</h2></div></div>
+<div class="rail">
+  <div class="x">
+    <div class="ph arch"><img src="../../references/photos/crop/s1.jpg" alt=""><div class="add">+</div></div>
+    <div class="xn display">Кекс с корицей</div>
+    <div class="xp">85 с.</div>
+  </div>
+  <div class="x">
+    <div class="ph arch"><img src="../../references/photos/crop/s2.jpg" alt=""><div class="add">+</div></div>
+    <div class="xn display">Десерт Safia</div>
+    <div class="xp">45 с.</div>
+  </div>
+  <div class="x">
+    <div class="ph arch"><img src="../../references/photos/crop/g6.jpg" alt=""><div class="add">+</div></div>
+    <div class="xn display">Открытка</div>
+    <div class="xp">25 с.</div>
+  </div>
+</div>
+
+<div class="bottombar">
+  <div class="stepper"><span>−</span> 1 <span>+</span></div>
+  <div class="cta">В корзину · 450 с.</div>
+</div>
+<div class="homebar"></div>
+
+</body>
+</html>

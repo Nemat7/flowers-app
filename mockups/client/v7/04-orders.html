@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>v7 · 04 — Заказы</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+  .tabs { display:flex; gap:22px; padding:18px 20px 0; border-bottom:1px solid var(--line); }
+  .tabs div { padding-bottom:12px; font-size:14px; font-weight:700; color:var(--ink-3); }
+  .tabs div.on { color:var(--ink); box-shadow:inset 0 -2px 0 var(--clay); }
+
+  /* активный заказ — тёмная карточка с живым треком */
+  .live { margin:20px 20px 0; background:var(--ink); color:#fff; border-radius:var(--r-lg); padding:18px; }
+  .live .top { display:flex; align-items:center; gap:11px; }
+  .live .ava { width:42px; height:42px; border-radius:50%; overflow:hidden; flex:0 0 auto; }
+  .live .t1 { font-family:'Cormorant Garamond',serif; font-size:21px; font-weight:600; }
+  .live .t2 { font-size:12px; color:#B0A79C; margin-top:2px; }
+  .live .pill {
+    margin-left:auto; display:flex; align-items:center; gap:5px; background:rgba(46,107,82,.3);
+    color:#7FD6AE; font-size:10px; font-weight:800; letter-spacing:.14em; padding:6px 10px; border-radius:999px;
+  }
+  .live .pill i { width:6px; height:6px; border-radius:50%; background:#7FD6AE; display:block; }
+  .live .track { display:flex; gap:5px; margin-top:16px; }
+  .live .track s { flex:1; height:3px; border-radius:2px; background:#37302A; display:block; }
+  .live .track s.on { background:#7FD6AE; }
+  .live .foot { display:flex; justify-content:space-between; align-items:center; margin-top:12px; font-size:11.5px; color:#B0A79C; }
+  .live .pin { display:flex; gap:5px; }
+  .live .pin b {
+    width:26px; height:30px; border-radius:7px; background:#2A241F; color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700;
+  }
+
+  .day { padding:28px 20px 12px; }
+  .row { display:flex; align-items:center; gap:13px; padding:16px 20px; border-top:1px solid var(--line); }
+  .row .lg { width:48px; height:48px; border-radius:14px; overflow:hidden; flex:0 0 auto; }
+  .row .n { font-size:18px; line-height:1.1; }
+  .row .s { font-size:12px; color:var(--ink-2); margin-top:4px; }
+  .row .right { margin-left:auto; text-align:right; }
+  .row .pr { font-size:14px; font-weight:700; }
+  .row .st { font-size:11px; font-weight:700; color:var(--leaf); margin-top:5px; }
+  .row .st.grey { color:var(--ink-3); }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="time">9:41</span>
+  <div class="icons">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect y="7" width="3" height="5" rx="1" fill="#171310"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#171310"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#171310"/><rect x="15" width="3" height="12" rx="1" fill="#171310"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#171310"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#171310"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#171310"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="#171310" opacity=".4" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#171310"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#171310" opacity=".4"/></svg>
+  </div>
+</div>
+
+<div class="title"><h1 class="display">Мои заказы</h1></div>
+
+<div class="tabs">
+  <div class="on">Все</div>
+  <div>Активные</div>
+  <div>Завершённые</div>
+</div>
+
+<div class="live">
+  <div class="top">
+    <div class="ava"><img src="../../references/photos/crop/b1.jpg" alt=""></div>
+    <div>
+      <div class="t1">Курьер в пути</div>
+      <div class="t2">Фирдавс будет у получателя через 12 минут</div>
+    </div>
+    <div class="pill"><i></i>LIVE</div>
+  </div>
+  <div class="track"><s class="on"></s><s class="on"></s><s class="on"></s><s></s></div>
+  <div class="foot">
+    <span>F-38035 · Bloom · 535 с.</span>
+    <div class="pin"><b>4</b><b>7</b><b>2</b><b>9</b></div>
+  </div>
+</div>
+
+<div class="day eyebrow">10 августа</div>
+<div class="row">
+  <div class="lg"><img src="../../references/photos/bloom logo.jpg" alt=""></div>
+  <div>
+    <div class="n display">F-37980</div>
+    <div class="s">Bloom · 2 позиции</div>
+  </div>
+  <div class="right">
+    <div class="pr">130 с.</div>
+    <div class="st">Доставлен</div>
+  </div>
+</div>
+<div class="row">
+  <div class="lg"><img src="../../references/photos/logo gulianor.jpg" alt=""></div>
+  <div>
+    <div class="n display">F-37912</div>
+    <div class="s">Guli Anor · 1 позиция</div>
+  </div>
+  <div class="right">
+    <div class="pr">450 с.</div>
+    <div class="st">Доставлен</div>
+  </div>
+</div>
+
+<div class="day eyebrow">2 августа</div>
+<div class="row">
+  <div class="lg"><img src="../../references/photos/safia logo.jpg" alt=""></div>
+  <div>
+    <div class="n display">F-37455</div>
+    <div class="s">Safia · 3 позиции</div>
+  </div>
+  <div class="right">
+    <div class="pr">215 с.</div>
+    <div class="st grey">Отменён</div>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="it">
+    <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.5Z" stroke="#A79C90" stroke-width="1.9" stroke-linejoin="round"/></svg>
+    <span>Главная</span>
+  </div>
+  <div class="it">
+    <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#A79C90" stroke-width="1.9"/><path d="m20 20-3.5-3.5" stroke="#A79C90" stroke-width="1.9" stroke-linecap="round"/></svg>
+    <span>Поиск</span>
+  </div>
+  <div class="it on">
+    <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M6 3h12v18l-2-1.5L14 21l-2-1.5L10 21l-2-1.5L6 21V3Z" stroke="#C0563E" stroke-width="1.9" stroke-linejoin="round"/><path d="M9 8h6M9 12h6" stroke="#C0563E" stroke-width="1.9" stroke-linecap="round"/></svg>
+    <span>Заказы</span>
+  </div>
+  <div class="it">
+    <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#A79C90" stroke-width="1.9"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" stroke="#A79C90" stroke-width="1.9" stroke-linecap="round"/></svg>
+    <span>Профиль</span>
+  </div>
+</div>
+<div class="homebar"></div>
+
+</body>
+</html>

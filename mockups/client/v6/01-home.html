@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>v6 · 01 — Главная</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ дизайн-токены v6 ============
+     Тёплая база вместо серой, чёрный — действие, зелёный — только статус,
+     розовый — бренд. Заголовки — антиква, интерфейс — Inter. */
+  :root {
+    --ink:        #14120F;   /* тёплый чёрный вместо #191919 */
+    --ink-2:      #6E6A66;   /* вторичный текст */
+    --ink-3:      #A39E98;
+    --cream:      #F7F4F0;   /* заливка полей и плиток вместо #F6F6F6 */
+    --line:       #ECE7E1;
+    --brand:      #C6425A;   /* бренд: бейджи, активные чипы, акценты */
+    --live:       #06A66B;   /* статус: открыто / LIVE / доставлено */
+    --radius-lg:  24px;
+    --radius-md:  18px;
+    --shadow:     0 10px 30px rgba(20,18,15,.10);
+    --shadow-sm:  0 4px 14px rgba(20,18,15,.07);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:390px; }
+  body {
+    font-family:'Inter',-apple-system,'Segoe UI',sans-serif;
+    background:#FFFFFF; color:var(--ink); position:relative;
+    padding-bottom:120px; -webkit-font-smoothing:antialiased;
+  }
+  h1, h2, .serif { font-family:'Playfair Display',Georgia,serif; }
+
+  /* ---------- status bar ---------- */
+  .statusbar { height:54px; padding:18px 28px 0; display:flex; justify-content:space-between; align-items:center; }
+  .statusbar .time { font-size:15px; font-weight:600; letter-spacing:.2px; }
+  .statusbar .icons { display:flex; align-items:center; gap:6px; }
+
+  /* ---------- шапка: адрес + колокольчик ---------- */
+  .topbar { padding:6px 16px 0; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .addr { display:flex; align-items:center; gap:7px; }
+  .addr .lab { font-size:11px; color:var(--ink-2); font-weight:500; letter-spacing:.02em; }
+  .addr .adr { font-size:15px; font-weight:700; display:flex; align-items:center; gap:5px; margin-top:1px; }
+  .bell {
+    width:42px; height:42px; border-radius:50%; background:var(--cream); flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .bell .cnt {
+    position:absolute; top:-1px; right:-1px; width:18px; height:18px; border-radius:50%;
+    background:var(--brand); color:#fff; font-size:10.5px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; border:2px solid #fff;
+  }
+
+  /* ---------- живой заказ ---------- */
+  .live {
+    margin:16px 16px 0; background:var(--ink); color:#fff; border-radius:var(--radius-lg);
+    padding:16px 16px 14px; position:relative; overflow:hidden;
+  }
+  .live .row { display:flex; align-items:center; gap:11px; }
+  .live .ava {
+    width:40px; height:40px; border-radius:50%; background:#2C2823; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700;
+  }
+  .live .t1 { font-size:14.5px; font-weight:700; }
+  .live .t2 { font-size:12.5px; color:#B5AFA8; margin-top:2px; }
+  .live .pill {
+    margin-left:auto; display:flex; align-items:center; gap:5px; background:rgba(6,166,107,.16);
+    color:#5BE2AC; font-size:11px; font-weight:700; padding:5px 10px; border-radius:999px;
+  }
+  .live .pill i { width:6px; height:6px; border-radius:50%; background:#5BE2AC; display:block; }
+  .live .track { display:flex; align-items:center; gap:6px; margin-top:14px; }
+  .live .track s { flex:1; height:3px; border-radius:2px; background:#3A3530; display:block; }
+  .live .track s.on { background:#5BE2AC; }
+  .live .eta { display:flex; justify-content:space-between; margin-top:9px; font-size:11.5px; color:#B5AFA8; }
+  .live .eta b { color:#fff; font-weight:600; }
+
+  /* ---------- заголовок + поиск ---------- */
+  .hero { padding:22px 16px 0; }
+  .hero h1 { font-size:30px; font-weight:600; line-height:1.14; letter-spacing:-.4px; }
+  .hero h1 em { font-style:italic; color:var(--brand); }
+  .searchrow { display:flex; gap:9px; padding:14px 16px 0; }
+  .search {
+    flex:1; display:flex; align-items:center; gap:10px; background:var(--cream);
+    border-radius:999px; padding:14px 16px; font-size:14px; color:var(--ink-2); font-weight:500;
+  }
+  .when {
+    display:flex; align-items:center; gap:7px; background:var(--ink); color:#fff;
+    border-radius:999px; padding:0 16px; font-size:13px; font-weight:600; white-space:nowrap;
+  }
+
+  /* ---------- секции ---------- */
+  .sechead { display:flex; justify-content:space-between; align-items:center; padding:26px 16px 12px; }
+  .sechead h2 { font-size:21px; font-weight:600; letter-spacing:-.2px; }
+  .sechead a { font-size:13px; color:var(--ink-2); font-weight:600; text-decoration:none; display:flex; align-items:center; gap:4px; }
+
+  /* ---------- поводы ---------- */
+  .occ { display:flex; gap:10px; padding:0 0 2px 16px; overflow:hidden; }
+  .occard {
+    flex:0 0 124px; height:150px; border-radius:var(--radius-md); overflow:hidden;
+    position:relative; color:#fff;
+  }
+  .occard img { width:100%; height:100%; object-fit:cover; display:block; }
+  .occard::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,0) 38%, rgba(0,0,0,.68));
+  }
+  .occard span {
+    position:absolute; left:12px; right:10px; bottom:11px; z-index:2;
+    font-size:13.5px; font-weight:700; line-height:1.2; letter-spacing:-.1px;
+  }
+
+  /* ---------- букет дня ---------- */
+  .pick { margin:0 16px; border-radius:var(--radius-lg); overflow:hidden; position:relative; height:250px; color:#fff; }
+  .pick img { width:100%; height:100%; object-fit:cover; display:block; }
+  .pick::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,.18) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,.74) 100%);
+  }
+  .pick .body { position:absolute; left:18px; right:18px; bottom:16px; z-index:2; padding-right:58px; }
+  .pick .eyebrow {
+    font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#F3C3CE;
+  }
+  .pick h3 { font-family:'Playfair Display',serif; font-size:23px; font-weight:600; margin-top:5px; letter-spacing:-.2px; }
+  .pick .meta { font-size:12.5px; color:rgba(255,255,255,.82); margin-top:5px; font-weight:500; }
+  .pick .go {
+    position:absolute; right:0; bottom:2px; width:46px; height:46px; border-radius:50%;
+    background:#fff; display:flex; align-items:center; justify-content:center;
+  }
+  .pick .price {
+    position:absolute; top:16px; left:18px; z-index:2; background:rgba(255,255,255,.94); color:var(--ink);
+    font-size:13px; font-weight:700; padding:7px 12px; border-radius:999px;
+  }
+
+  /* ---------- магазины ---------- */
+  .shops { padding:0 16px; display:flex; flex-direction:column; gap:22px; }
+  .shop .ph { position:relative; height:168px; border-radius:var(--radius-md); overflow:hidden; }
+  .shop .ph img { width:100%; height:100%; object-fit:cover; display:block; }
+  .shop .fav {
+    position:absolute; top:12px; right:12px; width:34px; height:34px; border-radius:50%;
+    background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center;
+    box-shadow:var(--shadow-sm);
+  }
+  .shop .tags { position:absolute; left:12px; bottom:12px; display:flex; gap:6px; }
+  .chip-own {
+    background:var(--brand); color:#fff; border-radius:999px; padding:5px 11px;
+    font-size:11px; font-weight:700;
+  }
+  .chip-open {
+    background:rgba(255,255,255,.94); color:var(--ink); border-radius:999px; padding:5px 11px;
+    font-size:11px; font-weight:700; display:flex; align-items:center; gap:5px;
+  }
+  .chip-open i { width:6px; height:6px; border-radius:50%; background:var(--live); display:block; }
+  .shop .row1 { display:flex; justify-content:space-between; align-items:center; padding:11px 2px 0; }
+  .shop .nm { font-size:17px; font-weight:700; letter-spacing:-.2px; }
+  .shop .rt { font-size:13px; font-weight:700; display:flex; align-items:center; gap:4px; }
+  .shop .row2 { display:flex; align-items:center; gap:7px; padding:5px 2px 0; font-size:12.5px; color:var(--ink-2); font-weight:500; }
+  .shop .dot { width:3px; height:3px; border-radius:50%; background:var(--ink-3); display:block; }
+
+  /* ---------- таббар ---------- */
+  .tabbar {
+    position:fixed; left:16px; right:16px; bottom:22px; height:64px; z-index:10;
+    background:rgba(255,255,255,.86); backdrop-filter:blur(18px); border:1px solid var(--line);
+    border-radius:999px; box-shadow:var(--shadow);
+    display:flex; align-items:center; justify-content:space-around; padding:0 8px;
+  }
+  .tab { display:flex; align-items:center; gap:7px; padding:10px 12px; border-radius:999px; color:var(--ink-3); }
+  .tab.on { background:var(--ink); color:#fff; padding:10px 16px; font-size:13px; font-weight:700; }
+  .homebar {
+    position:fixed; bottom:8px; left:50%; transform:translateX(-50%);
+    width:134px; height:5px; border-radius:3px; background:var(--ink); z-index:11;
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="time">9:41</span>
+  <div class="icons">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1" fill="#14120F"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#14120F"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#14120F"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#14120F"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#14120F"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#14120F"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#14120F"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#14120F" opacity=".4" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#14120F"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#14120F" opacity=".4"/></svg>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="addr">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-5.6-7-11a7 7 0 1 1 14 0c0 5.4-7 11-7 11Z" stroke="#14120F" stroke-width="2"/><circle cx="12" cy="10" r="2.6" stroke="#14120F" stroke-width="2"/></svg>
+    <div>
+      <div class="lab">Доставка сюда</div>
+      <div class="adr">ул. Рудаки 25
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="#14120F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </div>
+  <div class="bell">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9Z" stroke="#14120F" stroke-width="2" stroke-linejoin="round"/><path d="M10 20a2.2 2.2 0 0 0 4 0" stroke="#14120F" stroke-width="2" stroke-linecap="round"/></svg>
+    <div class="cnt">1</div>
+  </div>
+</div>
+
+<!-- живой заказ: главная фича продукта вынесена на первый экран -->
+<div class="live">
+  <div class="row">
+    <div class="ava">Ф</div>
+    <div>
+      <div class="t1">Курьер в пути</div>
+      <div class="t2">Фирдавс будет у получателя через 12 мин</div>
+    </div>
+    <div class="pill"><i></i>LIVE</div>
+  </div>
+  <div class="track"><s class="on"></s><s class="on"></s><s class="on"></s><s></s></div>
+  <div class="eta">
+    <span>Заказ <b>F-38035</b> · Bloom</span>
+    <span>PIN получателя <b>4729</b></span>
+  </div>
+</div>
+
+<div class="hero">
+  <h1>Что подарим<br><em>сегодня?</em></h1>
+</div>
+
+<div class="searchrow">
+  <div class="search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#6E6A66" stroke-width="2.2"/><path d="m20 20-3.5-3.5" stroke="#6E6A66" stroke-width="2.2" stroke-linecap="round"/></svg>
+    Найти букет или магазин…
+  </div>
+  <div class="when">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#fff" stroke-width="2"/><path d="M12 7v5.4l3.4 2" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+    К 18:00
+  </div>
+</div>
+
+<!-- поводы вместо категорий: люди ищут не «букеты», а «на день рождения» -->
+<div class="sechead">
+  <h2>Какой повод?</h2>
+  <a href="#">Все <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="#6E6A66" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+</div>
+<div class="occ">
+  <div class="occard"><img src="../../references/photos/crop/g7.jpg" alt=""><span>День<br>рождения</span></div>
+  <div class="occard"><img src="../../references/photos/crop/b2.jpg" alt=""><span>Любимой</span></div>
+  <div class="occard"><img src="../../references/photos/crop/g2.jpg" alt=""><span>Извиниться</span></div>
+  <div class="occard"><img src="../../references/photos/crop/s3.jpg" alt=""><span>Просто так</span></div>
+</div>
+
+<div class="sechead">
+  <h2>Выбор редакции</h2>
+  <a href="#">Все <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="#6E6A66" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+</div>
+<div class="pick">
+  <img src="../../references/photos/crop/b1.jpg" alt="Гортензия с орхидеей">
+  <div class="price">450 с.</div>
+  <div class="body">
+    <div class="eyebrow">Букет дня</div>
+    <h3>Гортензия с орхидеей</h3>
+    <div class="meta">Bloom · соберут за 20 минут · привезём к 18:00</div>
+    <div class="go">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#14120F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+</div>
+
+<div class="sechead">
+  <h2>Магазины рядом</h2>
+  <a href="#">Все <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="#6E6A66" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+</div>
+<div class="shops">
+  <div class="shop">
+    <div class="ph">
+      <img src="../../references/photos/crop/b3.jpg" alt="Bloom">
+      <div class="fav"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#14120F" stroke-width="2" stroke-linejoin="round"/></svg></div>
+      <div class="tags">
+        <div class="chip-own">Наш магазин</div>
+        <div class="chip-open"><i></i>Открыто</div>
+      </div>
+    </div>
+    <div class="row1">
+      <div class="nm">Bloom · цветочная мастерская</div>
+      <div class="rt">★ 4.9</div>
+    </div>
+    <div class="row2">Цветы <span class="dot"></span> 35–45 мин <span class="dot"></span> доставка от 15 с.</div>
+  </div>
+  <div class="shop">
+    <div class="ph">
+      <img src="../../references/photos/crop/g1.jpg" alt="Guli Anor">
+      <div class="fav"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.2-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.2 11c-1.7 4.4-9.2 9-9.2 9Z" stroke="#14120F" stroke-width="2" stroke-linejoin="round"/></svg></div>
+      <div class="tags">
+        <div class="chip-open"><i></i>Открыто</div>
+      </div>
+    </div>
+    <div class="row1">
+      <div class="nm">Guli Anor</div>
+      <div class="rt">★ 4.8</div>
+    </div>
+    <div class="row2">Цветы <span class="dot"></span> 40–55 мин <span class="dot"></span> доставка от 20 с.</div>
+  </div>
+</div>
+
+<div class="tabbar">
+  <div class="tab on">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.5Z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+    Главная
+  </div>
+  <div class="tab"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#A39E98" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="#A39E98" stroke-width="2" stroke-linecap="round"/></svg></div>
+  <div class="tab"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M6 3h12v18l-2-1.5L14 21l-2-1.5L10 21l-2-1.5L6 21V3Z" stroke="#A39E98" stroke-width="2" stroke-linejoin="round"/><path d="M9 8h6M9 12h6" stroke="#A39E98" stroke-width="2" stroke-linecap="round"/></svg></div>
+  <div class="tab"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#A39E98" stroke-width="2"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" stroke="#A39E98" stroke-width="2" stroke-linecap="round"/></svg></div>
+</div>
+<div class="homebar"></div>
+
+</body>
+</html>

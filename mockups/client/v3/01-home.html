@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>v3 · 01 — Главная</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:390px; height:844px; overflow:hidden; }
+  body {
+    font-family:'Manrope',-apple-system,'Segoe UI',sans-serif;
+    background:#FAF7F2; color:#1F1B16; position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  .serif { font-family:'Playfair Display',Georgia,serif; }
+  /* ---------- status bar ---------- */
+  .statusbar {
+    height:54px; padding:18px 28px 0; display:flex; justify-content:space-between;
+    align-items:center;
+  }
+  .statusbar .time { font-size:15px; font-weight:600; letter-spacing:.2px; }
+  .statusbar .icons { display:flex; align-items:center; gap:6px; }
+  /* ---------- header ---------- */
+  .topbar { padding:10px 24px 0; display:flex; align-items:center; justify-content:space-between; }
+  .hello .label {
+    font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:#8A8178; display:flex; align-items:center; gap:5px;
+  }
+  .hello .label svg { flex:0 0 auto; }
+  .hello h1 { font-family:'Playfair Display',Georgia,serif; font-size:27px; font-weight:700; margin-top:6px; line-height:1.15; }
+  .bellwrap { position:relative; }
+  .bell {
+    width:44px; height:44px; border-radius:50%; background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 8px 24px rgba(31,27,22,.05);
+  }
+  .badge {
+    position:absolute; top:0; right:0; width:18px; height:18px; border-radius:50%;
+    background:#C4718B; color:#fff; font-size:10.5px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; border:2px solid #FAF7F2;
+  }
+  /* ---------- search ---------- */
+  .searchwrap { padding:16px 24px 0; }
+  .search {
+    display:flex; align-items:center; gap:10px; background:#fff; border-radius:999px;
+    padding:14px 18px; font-size:14px; color:#8A8178;
+    box-shadow:0 8px 24px rgba(31,27,22,.05);
+  }
+  /* ---------- categories ---------- */
+  .cats { display:flex; gap:10px; padding:16px 24px 0; }
+  .cat {
+    flex:1; border-radius:20px; padding:14px 6px 12px; text-align:center;
+  }
+  .cat .ic {
+    width:40px; height:40px; margin:0 auto 8px; border-radius:50%; background:rgba(255,255,255,.75);
+    display:flex; align-items:center; justify-content:center; font-size:19px;
+  }
+  .cat span { font-size:11.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+  .cp { background:#F4DFE6; } .cl { background:#E6DFF0; } .cs { background:#DDE8DA; }
+  /* ---------- section head ---------- */
+  .sechead { display:flex; justify-content:space-between; align-items:baseline; padding:18px 24px 10px; }
+  .sechead h2 { font-family:'Playfair Display',Georgia,serif; font-size:19px; font-weight:700; }
+  .sechead a { font-size:12px; color:#C4718B; font-weight:700; text-decoration:none; letter-spacing:.02em; }
+  /* ---------- shop cards ---------- */
+  .shops { padding:0 24px; display:flex; flex-direction:column; gap:16px; }
+  .shop {
+    background:#fff; border-radius:26px; overflow:hidden;
+    box-shadow:0 8px 24px rgba(31,27,22,.05);
+  }
+  .shop.closed { opacity:.55; }
+  .cover { position:relative; height:130px; overflow:hidden; }
+  .cover > img { width:100%; height:100%; object-fit:cover; display:block; }
+  .st {
+    position:absolute; top:12px; left:12px; border-radius:999px; padding:5px 13px;
+    font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  }
+  .st.open { background:#E4EEE2; color:#4E7A4B; }
+  .st.later { background:rgba(255,255,255,.88); color:#8A8178; }
+  .promo {
+    position:absolute; left:12px; bottom:12px; background:rgba(255,255,255,.92);
+    color:#C4718B; border-radius:999px; padding:6px 13px; font-size:11.5px; font-weight:700;
+  }
+  .inf { padding:11px 18px 13px; display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+  .nm { font-family:'Playfair Display',Georgia,serif; font-size:19px; font-weight:700; }
+  .meta { font-size:12px; color:#8A8178; font-weight:500; white-space:nowrap; }
+  .meta .star { color:#C4718B; }
+  /* ---------- tabbar ---------- */
+  .tabbar {
+    position:absolute; left:0; right:0; bottom:0; height:82px; background:#fff;
+    display:flex; padding:10px 26px 0; box-shadow:0 -8px 24px rgba(31,27,22,.04);
+  }
+  .tab { flex:1; text-align:center; font-size:10px; color:#B4ABA0; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+  .tab .ic { height:26px; display:flex; align-items:center; justify-content:center; }
+  .tab.on { color:#C4718B; }
+  .homebar {
+    position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+    width:134px; height:5px; border-radius:3px; background:#1F1B16;
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="time">9:41</span>
+  <div class="icons">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1" fill="#1F1B16"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#1F1B16"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#1F1B16"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#1F1B16"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#1F1B16"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#1F1B16"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#1F1B16"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#1F1B16" opacity=".4" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#1F1B16"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#1F1B16" opacity=".4"/></svg>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="hello">
+    <div class="label">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-5.6-7-11a7 7 0 1 1 14 0c0 5.4-7 11-7 11Z" stroke="#C4718B" stroke-width="2.4"/><circle cx="12" cy="10" r="2.6" stroke="#C4718B" stroke-width="2.4"/></svg>
+      ул. Рудаки 25
+      <svg width="8" height="8" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="#8A8178" stroke-width="3.5" stroke-linecap="round"/></svg>
+    </div>
+    <h1>Цветы для близких</h1>
+  </div>
+  <div class="bellwrap">
+    <div class="bell">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9Z" stroke="#1F1B16" stroke-width="2" stroke-linejoin="round"/><path d="M10 20a2.2 2.2 0 0 0 4 0" stroke="#1F1B16" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <div class="badge">1</div>
+  </div>
+</div>
+
+<div class="searchwrap">
+  <div class="search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#8A8178" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="#8A8178" stroke-width="2" stroke-linecap="round"/></svg>
+    Найти магазин или букет…
+  </div>
+</div>
+
+<div class="cats">
+  <div class="cat cp"><div class="ic">💐</div><span>Букеты</span></div>
+  <div class="cat cl"><div class="ic">🧁</div><span>Сладости</span></div>
+  <div class="cat cs"><div class="ic">💌</div><span>Открытки</span></div>
+</div>
+
+<div class="sechead"><h2>Магазины рядом</h2><a href="#">Все</a></div>
+
+<div class="shops">
+
+  <div class="shop">
+    <div class="cover">
+      <img src="../img/shop-front.jpg" alt="Цветочный магазин «Лотос»">
+      <div class="st open">Открыто</div>
+      <div class="promo">−20% на розы сегодня</div>
+    </div>
+    <div class="inf">
+      <div class="nm">Лотос</div>
+      <div class="meta"><span class="star">★</span> 4.9 · 35–45 мин · от 150 с.</div>
+    </div>
+  </div>
+
+  <div class="shop">
+    <div class="cover">
+      <img src="../img/mixed-bouquet.jpg" alt="Цветочный магазин «Флора»">
+      <div class="st open">Открыто</div>
+    </div>
+    <div class="inf">
+      <div class="nm">Флора</div>
+      <div class="meta"><span class="star">★</span> 4.8 · 40–55 мин · от 200 с.</div>
+    </div>
+  </div>
+
+  <div class="shop closed">
+    <div class="cover">
+      <img src="../img/tulips.jpg" alt="Магазин «Букет Душанбе»">
+      <div class="st later">Откроется в 9:00</div>
+    </div>
+    <div class="inf">
+      <div class="nm">Букет Душанбе</div>
+      <div class="meta"><span class="star">★</span> 4.7 · 30–45 мин · от 120 с.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="tabbar">
+  <div class="tab on">
+    <div class="ic"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.5Z" stroke="#C4718B" stroke-width="2" stroke-linejoin="round"/></svg></div>
+    Главная
+  </div>
+  <div class="tab">
+    <div class="ic"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="2.5" stroke="#B4ABA0" stroke-width="2"/><rect x="13" y="3" width="8" height="8" rx="2.5" stroke="#B4ABA0" stroke-width="2"/><rect x="3" y="13" width="8" height="8" rx="2.5" stroke="#B4ABA0" stroke-width="2"/><rect x="13" y="13" width="8" height="8" rx="2.5" stroke="#B4ABA0" stroke-width="2"/></svg></div>
+    Каталог
+  </div>
+  <div class="tab">
+    <div class="ic"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M6 3h12v18l-2-1.5L14 21l-2-1.5L10 21l-2-1.5L6 21V3Z" stroke="#B4ABA0" stroke-width="2" stroke-linejoin="round"/><path d="M9 8h6M9 12h6" stroke="#B4ABA0" stroke-width="2" stroke-linecap="round"/></svg></div>
+    Заказы
+  </div>
+  <div class="tab">
+    <div class="ic"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#B4ABA0" stroke-width="2"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" stroke="#B4ABA0" stroke-width="2" stroke-linecap="round"/></svg></div>
+    Профиль
+  </div>
+</div>
+<div class="homebar"></div>
+
+</body>
+</html>

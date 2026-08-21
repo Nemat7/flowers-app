@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>01v2 — Главная (shop-first)</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:390px; height:844px; overflow:hidden; }
+  body {
+    font-family:-apple-system,'SF Pro Text','SF Pro Display',Inter,'Segoe UI',sans-serif;
+    background:#F7F7F8; color:#1A1A1A; position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* ---------- status bar ---------- */
+  .statusbar {
+    height:54px; padding:18px 28px 0; display:flex; justify-content:space-between;
+    align-items:center; background:#fff;
+  }
+  .statusbar .time { font-size:15px; font-weight:600; letter-spacing:.2px; }
+  .statusbar .icons { display:flex; align-items:center; gap:6px; }
+  /* ---------- header ---------- */
+  .topbar {
+    background:#fff; padding:8px 20px 14px; display:flex; align-items:center;
+    justify-content:space-between;
+  }
+  .locrow { display:flex; align-items:center; gap:6px; font-size:17px; font-weight:700; }
+  .locrow svg.pin { flex:0 0 auto; }
+  .locrow .chev { opacity:.55; }
+  .bellwrap { position:relative; }
+  .bell {
+    width:42px; height:42px; border-radius:50%; background:#F7F7F8;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 16px rgba(0,0,0,.06);
+  }
+  .badge {
+    position:absolute; top:-2px; right:-2px; min-width:18px; height:18px;
+    border-radius:9px; background:#D6336C; color:#fff; font-size:11px;
+    font-weight:700; display:flex; align-items:center; justify-content:center;
+    padding:0 4px; border:2px solid #fff;
+  }
+  /* ---------- search ---------- */
+  .searchwrap { background:#fff; padding:0 20px 16px; }
+  .search {
+    display:flex; align-items:center; gap:10px; background:#F7F7F8;
+    border-radius:16px; padding:13px 16px; font-size:15px; color:#9CA3AF;
+  }
+  /* ---------- filter chips ---------- */
+  .chips {
+    display:flex; gap:8px; padding:14px 0 4px 20px; overflow:hidden;
+  }
+  .chip {
+    flex:0 0 auto; background:#fff; border-radius:999px; padding:9px 16px;
+    font-size:13.5px; font-weight:600; color:#4B5563;
+    box-shadow:0 4px 16px rgba(0,0,0,.06);
+  }
+  .chip.on { background:#D6336C; color:#fff; }
+  /* ---------- shop cards ---------- */
+  .shops { padding:12px 20px 0; display:flex; flex-direction:column; gap:14px; }
+  .shop {
+    background:#fff; border-radius:20px; overflow:hidden;
+    box-shadow:0 4px 16px rgba(0,0,0,.06);
+  }
+  .shop.closed { opacity:.6; }
+  .cover { position:relative; height:168px; overflow:hidden; }
+  .cover > img { width:100%; height:100%; object-fit:cover; display:block; }
+  .st {
+    position:absolute; top:12px; left:12px; border-radius:999px;
+    padding:5px 12px; font-size:12px; font-weight:700; color:#fff;
+  }
+  .st.open { background:#5B8C5A; }
+  .st.later { background:rgba(60,60,67,.85); }
+  .promo {
+    position:absolute; left:12px; bottom:12px; background:#D6336C; color:#fff;
+    border-radius:10px; padding:6px 12px; font-size:12.5px; font-weight:700;
+    box-shadow:0 4px 12px rgba(214,51,108,.35);
+  }
+  .inf { padding:11px 16px 13px; }
+  .nm { font-size:17px; font-weight:700; }
+  .meta { font-size:13px; color:#6B7280; margin-top:5px; white-space:nowrap; }
+  .meta b { color:#1A1A1A; font-weight:600; }
+  .meta .star { color:#F0A22E; }
+  /* ---------- tabbar ---------- */
+  .tabbar {
+    position:absolute; left:0; right:0; bottom:0; height:82px; background:#fff;
+    box-shadow:0 -4px 20px rgba(0,0,0,.05); display:flex; padding:10px 26px 0;
+  }
+  .tab { flex:1; text-align:center; font-size:10.5px; color:#9CA3AF; font-weight:600; }
+  .tab .ic { height:26px; display:flex; align-items:center; justify-content:center; }
+  .tab.on { color:#D6336C; }
+  .homebar {
+    position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+    width:134px; height:5px; border-radius:3px; background:#1A1A1A;
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="time">9:41</span>
+  <div class="icons">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1" fill="#1A1A1A"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#1A1A1A"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#1A1A1A"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#1A1A1A"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#1A1A1A"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#1A1A1A"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#1A1A1A"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#1A1A1A" opacity=".4" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#1A1A1A"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#1A1A1A" opacity=".4"/></svg>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="locrow">
+    <svg class="pin" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-5.6-7-11a7 7 0 1 1 14 0c0 5.4-7 11-7 11Z" stroke="#D6336C" stroke-width="2"/><circle cx="12" cy="10" r="2.6" stroke="#D6336C" stroke-width="2"/></svg>
+    ул. Рудаки 25
+    <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round"/></svg>
+  </div>
+  <div class="bellwrap">
+    <div class="bell">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9Z" stroke="#1A1A1A" stroke-width="2" stroke-linejoin="round"/><path d="M10 20a2.2 2.2 0 0 0 4 0" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <div class="badge">1</div>
+  </div>
+</div>
+
+<div class="searchwrap">
+  <div class="search">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#9CA3AF" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"/></svg>
+    Найти магазин или букет…
+  </div>
+</div>
+
+<div class="chips">
+  <div class="chip on">Рядом</div>
+  <div class="chip">Рейтинг</div>
+  <div class="chip">Быстрее всех</div>
+  <div class="chip">Сладости тоже</div>
+</div>
+
+<div class="shops">
+
+  <div class="shop">
+    <div class="cover">
+      <img src="img/shop-front.jpg" alt="Цветочный магазин «Лотос»">
+      <div class="st open">Открыто</div>
+      <div class="promo">−20% на розы сегодня</div>
+    </div>
+    <div class="inf">
+      <div class="nm">Лотос</div>
+      <div class="meta"><span class="star">★</span> <b>4.9</b> (320) · 35–45 мин · мин. 150 с.</div>
+    </div>
+  </div>
+
+  <div class="shop">
+    <div class="cover">
+      <img src="img/mixed-bouquet.jpg" alt="Цветочный магазин «Флора»">
+      <div class="st open">Открыто</div>
+    </div>
+    <div class="inf">
+      <div class="nm">Флора</div>
+      <div class="meta"><span class="star">★</span> <b>4.8</b> (214) · 40–55 мин · мин. 200 с.</div>
+    </div>
+  </div>
+
+  <div class="shop closed">
+    <div class="cover">
+      <img src="img/tulips.jpg" alt="Магазин «Букет Душанбе»">
+      <div class="st later">Откроется в 9:00</div>
+    </div>
+    <div class="inf">
+      <div class="nm">Букет Душанбе</div>
+      <div class="meta"><span class="star">★</span> <b>4.7</b> (158) · 30–45 мин · мин. 120 с.</div>
+    </div>
+  </div>
+
+  <div class="shop">
+    <div class="cover">
+      <img src="img/honey-cake.jpg" alt="Кондитерская «Сладкий дом»">
+      <div class="st open">Открыто</div>
+    </div>
+    <div class="inf">
+      <div class="nm">Сладкий дом</div>
+      <div class="meta"><span class="star">★</span> <b>4.9</b> (402) · 25–40 мин · мин. 100 с.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="tabbar">
+  <div class="tab on">
+    <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-9.5Z" stroke="#D6336C" stroke-width="2" stroke-linejoin="round"/></svg></div>
+    Главная
+  </div>
+  <div class="tab">
+    <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="2" stroke="#9CA3AF" stroke-width="2"/><rect x="13" y="3" width="8" height="8" rx="2" stroke="#9CA3AF" stroke-width="2"/><rect x="3" y="13" width="8" height="8" rx="2" stroke="#9CA3AF" stroke-width="2"/><rect x="13" y="13" width="8" height="8" rx="2" stroke="#9CA3AF" stroke-width="2"/></svg></div>
+    Каталог
+  </div>
+  <div class="tab">
+    <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 3h12v18l-2-1.5L14 21l-2-1.5L10 21l-2-1.5L6 21V3Z" stroke="#9CA3AF" stroke-width="2" stroke-linejoin="round"/><path d="M9 8h6M9 12h6" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"/></svg></div>
+    Заказы
+  </div>
+  <div class="tab">
+    <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#9CA3AF" stroke-width="2"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"/></svg></div>
+    Профиль
+  </div>
+</div>
+<div class="homebar"></div>
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>v5 · 08 — Оплата</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:390px; height:844px; overflow:hidden; }
+  body {
+    font-family:'Inter',-apple-system,'Segoe UI',sans-serif;
+    background:#FFFFFF; color:#191919; position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  .statusbar { height:54px; padding:18px 28px 0; display:flex; justify-content:space-between; align-items:center; }
+  .statusbar .time { font-size:15px; font-weight:600; letter-spacing:.2px; }
+  .statusbar .icons { display:flex; align-items:center; gap:6px; }
+  .topbar { padding:12px 16px 0; display:flex; align-items:center; gap:14px; }
+  .rbtn {
+    width:38px; height:38px; border-radius:50%; background:#fff; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 16px rgba(0,0,0,.10);
+  }
+  .topbar h1 { font-size:22px; font-weight:800; letter-spacing:-.3px; }
+  .content { padding:18px 16px 0; }
+  /* sum */
+  .sum { text-align:center; margin-bottom:22px; }
+  .sum .lbl { font-size:12.5px; color:#757575; font-weight:500; }
+  .sum .val { font-size:38px; font-weight:800; letter-spacing:-.5px; margin-top:4px; }
+  .sum .val small { font-size:20px; font-weight:700; }
+  .sum .timer {
+    display:inline-flex; align-items:center; gap:6px; margin-top:10px;
+    background:#E5F8EE; color:#06C167; border-radius:999px; padding:6px 13px;
+    font-size:12px; font-weight:700;
+  }
+  .sum .ord { margin-top:9px; font-size:12px; color:#9C9C9C; }
+  .sechead { font-size:15px; font-weight:800; margin:0 2px 10px; letter-spacing:-.2px; }
+  /* methods */
+  .method {
+    border:1.5px solid #EFEFEF; border-radius:16px; padding:13px 14px; margin-bottom:10px;
+    display:flex; align-items:center; gap:13px;
+  }
+  .method.on { border-color:#191919; }
+  .logo {
+    width:48px; height:48px; border-radius:14px; display:flex; align-items:center;
+    justify-content:center; color:#fff; font-weight:800; font-size:15px; flex:0 0 48px;
+    letter-spacing:.3px;
+  }
+  .logo.alif { background:linear-gradient(135deg,#E03131,#FF6B6B); }
+  .logo.dc { background:linear-gradient(135deg,#1971C2,#20C997); font-size:12px; }
+  .method .nm { font-size:15px; font-weight:700; }
+  .method .ds { font-size:12px; color:#757575; margin-top:3px; }
+  .check {
+    margin-left:auto; width:24px; height:24px; border-radius:50%; flex:0 0 24px;
+    border:2px solid #D6D6D6;
+  }
+  .method.on .check {
+    border-color:#191919; background:#191919;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .soon { opacity:.5; }
+  /* secure */
+  .secure {
+    display:flex; gap:10px; align-items:flex-start; margin:14px 4px 0;
+    font-size:12px; color:#757575; line-height:1.45;
+  }
+  .cta {
+    position:absolute; left:16px; right:16px; bottom:30px; height:54px;
+    background:#000; border-radius:999px; color:#fff;
+    display:flex; align-items:center; justify-content:center; gap:9px;
+    font-size:15px; font-weight:700;
+  }
+  .homebar {
+    position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+    width:134px; height:5px; border-radius:3px; background:#191919;
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="time">9:41</span>
+  <div class="icons">
+    <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="7" width="3" height="5" rx="1" fill="#191919"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#191919"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#191919"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#191919"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 11.2 6.1 8.6a3.4 3.4 0 0 1 4.8 0L8.5 11.2Z" fill="#191919"/><path d="M3.6 6.1a7 7 0 0 1 9.8 0L12 7.5a5 5 0 0 0-7 0L3.6 6.1Z" fill="#191919"/><path d="M1 3.5a10.6 10.6 0 0 1 15 0l-1.4 1.4a8.6 8.6 0 0 0-12.2 0L1 3.5Z" fill="#191919"/></svg>
+    <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#191919" opacity=".4" fill="none"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#191919"/><path d="M23.5 4v4a2 2 0 0 0 0-4Z" fill="#191919" opacity=".4"/></svg>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="rbtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#191919" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <h1>Оплата</h1>
+</div>
+
+<div class="content">
+
+  <div class="sum">
+    <div class="lbl">К оплате</div>
+    <div class="val">550 <small>с.</small></div>
+    <div class="timer">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="13" r="8" stroke="#06C167" stroke-width="2.2"/><path d="M12 9v4l3 2" stroke="#06C167" stroke-width="2.2" stroke-linecap="round"/><path d="M9 2.5h6" stroke="#06C167" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Заказ зарезервирован на 14:52
+    </div>
+    <div class="ord">Заказ №F-38036 · Bloom · доставка 35–45 мин</div>
+  </div>
+
+  <div class="sechead">Способ оплаты</div>
+
+  <div class="method on">
+    <div class="logo alif">alif</div>
+    <div>
+      <div class="nm">Кошелёк Алиф</div>
+      <div class="ds">Баланс: 1 240 с. · спишется мгновенно</div>
+    </div>
+    <div class="check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="m4 12 5 5 11-11" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>
+
+  <div class="method">
+    <div class="logo dc">DC Next</div>
+    <div>
+      <div class="nm">Душанбе Сити</div>
+      <div class="ds">Оплата из кошелька DC Next</div>
+    </div>
+    <div class="check"></div>
+  </div>
+
+  <div class="method soon">
+    <div class="logo" style="background:linear-gradient(135deg,#ADB5BD,#CED4DA)">💳</div>
+    <div>
+      <div class="nm">Банковская карта</div>
+      <div class="ds">Скоро · Visa / Mastercard / Корти Милли</div>
+    </div>
+    <div class="check"></div>
+  </div>
+
+  <div class="secure">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex:0 0 auto;margin-top:1px"><rect x="4" y="10" width="16" height="10" rx="3" stroke="#757575" stroke-width="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3" stroke="#757575" stroke-width="2"/></svg>
+    <span>Оплата проходит через защищённый шлюз банка. Деньги резервируются
+      на счёте платформы и переводятся магазину только после доставки. Возврат — в один тап.</span>
+  </div>
+
+</div>
+
+<div class="cta">Оплатить 550 с.</div>
+<div class="homebar"></div>
+
+</body>
+</html>
