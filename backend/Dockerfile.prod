@@ -27,4 +27,5 @@ RUN SECRET_KEY=${DJANGO_SECRET_KEY_BUILD} \
 
 EXPOSE 8000
 # Railway подставляет PORT; локально (compose) PORT не задан — слушаем 8000.
-CMD ["sh", "-c", "daphne -b 0.0.0.0 -p ${PORT:-8000} config.asgi:application"]
+# Миграции при старте: идемпотентны, реплика одна — гонки нет.
+CMD ["sh", "-c", "python manage.py migrate --noinput && daphne -b 0.0.0.0 -p ${PORT:-8000} config.asgi:application"]
