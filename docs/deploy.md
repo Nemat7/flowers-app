@@ -177,3 +177,28 @@ $C exec backend python manage.py shell
 ## Приложение. Локальная проверка prod-стека
 
 Прогонялось на машине разработчика 17.09.2026. Отличия от прода: `DOMAIN=localhost`, HTTP без TLS (`SITE_ADDRESS=http://localhost`), порты 8088/8443 (80/443 не трогаем — там может быть tajiflix), `SMS_BACKEND=console`. Стек поднимался с отдельным project name, dev-БД не затрагивалась. См. рецепт в `backend/.env.production.example` (переменные `HTTP_PORT`/`HTTPS_PORT`/`SITE_ADDRESS`/`PANEL_ADDRESS`).
+
+---
+
+## Приложение 2. Деплой на Railway (текущий прод, 18.09.2026)
+
+Прод поднят на Railway (проект `flowers-app`), Caddy/VPS не используются — TLS и домены даёт Railway.
+
+**Сервисы:**
+
+- `db` — образ `postgis/postgis:16-3.4`, volume на `/var/lib/postgresql/data`. ВАЖНО: задан `PGDATA=/var/lib/postgresql/data/pgdata` — иначе initdb падает на `lost+found` в корне volume;
+- `redis` — образ `redis:7`, volume на `/data` (RDB-персистентность);
+- `backend` — repo, root `backend`, `Dockerfile.prod`. CMD: `migrate && daphne` (миграции при каждом старте, реплика одна). Публичный домен + volume `/app/media`. Healthcheck `/admin/login/`;
+- `celery` — тот же repo/root, startCommand `celery -A config worker -l info`, без домена;
+- `panel` — repo, root `shop-panel`, `Dockerfile.railway` (nginx раздаёт dist; VPS-вариант `Dockerfile` только копирует dist в volume для Caddy). Build args `VITE_API_URL`/`VITE_WS_URL` приходят из service-переменных.
+
+**Отличия Railway-стека от VPS-стека (код):**
+
+- `config/settings.py`: `SECURE_PROXY_SSL_HEADER` (TLS терминируется проксёй Railway) и `CSRF_TRUSTED_ORIGINS` (без них 403 на POST в админке по HTTPS);
+- статику раздаёт WhiteNoise (middleware), `/media/` раздаёт сам Django (`config/urls.py`, ветка `not DEBUG`) — на Railway нет nginx/Caddy;
+- `ALLOWED_HOSTS` должен включать `healthcheck.railway.app` — иначе healthcheck получает 400 и деплой помечается FAILED;
+- Railway задаёт `PORT` — daphne и nginx слушают `${PORT:-8000}`/`${PORT}`.
+
+**Миграции и разовые команды:** миграции — в CMD backend'а; разовые команды — `railway ssh -s backend python manage.py ...` (так создан суперюзер). ВНИМАНИЕ: `railway redeploy` переиспользует snapshot конфигурации старого деплоя — изменения startCommand/переменных применяются только на новом деплое (push или редеплой после смены переменных).
+
+**Доступы и секреты:** суперюзер `+992888887444`, пароль и `POSTGRES_PASSWORD` — в `backend/.env.production.local` (gitignored). OsonSMS работает без whitelist (SMS уходит, IP-ограничения нет).
