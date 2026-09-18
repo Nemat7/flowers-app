@@ -2,7 +2,8 @@
 Настройки проекта Flowers & Sweets.
 
 Все параметры окружения — через переменные (см. .env.example):
-DATABASE_URL (postgis://...), REDIS_URL, DEBUG, SECRET_KEY, ALLOWED_HOSTS.
+DATABASE_URL (postgis://...), REDIS_URL, DEBUG, SECRET_KEY, ALLOWED_HOSTS,
+CORS_ALLOWED_ORIGINS, CSRF_TRUSTED_ORIGINS.
 """
 from pathlib import Path
 
@@ -20,6 +21,12 @@ if env_file.exists():
 SECRET_KEY = env("SECRET_KEY", default="insecure-dev-key-change-me")
 DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"] if DEBUG else [])
+
+# За TLS-проксёй (Railway и т.п.): доверяем X-Forwarded-Proto, чтобы Django видел https,
+# иначе CSRF отклоняет POST из браузера (логин в админку и т.п.).
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# HTTPS-origins, которым разрешены POST (админка, формы). Пример: https://api.example.com
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 
 INSTALLED_APPS = [
     "daphne",  # ASGI-сервер для runserver (WebSocket, api.md §7)
@@ -51,6 +58,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # раздача staticfiles в проде без nginx
     "corsheaders.middleware.CorsMiddleware",  # до CommonMiddleware — для Flutter web dev-сервера
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

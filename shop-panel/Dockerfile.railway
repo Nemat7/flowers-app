@@ -1,0 +1,25 @@
+# Railway-вариант образа панели магазина (React+Vite).
+# Отличие от Dockerfile (VPS/Caddy): там контейнер копирует dist в volume,
+# а здесь финальная стадия — nginx, который сам раздаёт статику.
+FROM node:20-alpine AS build
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY . .
+
+# API/WS URL зашиваются в бандл на этапе сборки (vite import.meta.env).
+# Railway передаёт service-переменные как build args.
+ARG VITE_API_URL
+ARG VITE_WS_URL
+ENV VITE_API_URL=${VITE_API_URL} \
+    VITE_WS_URL=${VITE_WS_URL}
+
+RUN npm run build
+
+FROM nginx:1.27-alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+# entrypoint nginx-образа подставит ${PORT} (Railway) в конфиг из templates/
+COPY nginx.railway.conf /etc/nginx/templates/default.conf.template
+EXPOSE 8080
