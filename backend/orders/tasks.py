@@ -134,3 +134,22 @@ def complete_delivered_order(order_id: int) -> None:
 
     ws_events.notify_order_status(order)
     send_push(order.client, "order_status", {"order_id": order.id, "status": order.status})
+
+
+@shared_task
+def notify_shop_new_order_sms(order_id: int) -> None:
+    """SMS магазину о новом оплаченном заказе (на случай, если панель не открыта)."""
+    from accounts.sms import send_sms
+
+    try:
+        order = Order.objects.select_related("shop").get(pk=order_id)
+    except Order.DoesNotExist:
+        return
+    phone = order.shop.phone
+    if not phone:
+        return
+    send_sms(
+        phone,
+        f"Flowers&Swts: новый заказ {order.number} на {order.total} c. "
+        "Откройте панель магазина и примите заказ.",
+    )

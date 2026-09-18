@@ -1,0 +1,29 @@
+# Production-образ backend'а (Daphne/ASGI).
+# Отличия от dev-Dockerfile: нет dev-мусора, статика собирается на этапе сборки,
+# запуск через daphne (HTTP + WebSocket), а не runserver.
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# GeoDjango: GDAL/GEOS/PROJ (Django подключает их через ctypes, python-биндинги не нужны)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    binutils libproj-dev gdal-bin libgeos-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# collectstatic на этапе сборки, чтобы статика админки была запечена в образ.
+# settings.py требует SECRET_KEY — передаём одноразовый dummy через ARG
+# (в образ не сохраняется как ENV, используется только в этом RUN).
+ARG DJANGO_SECRET_KEY_BUILD=dummy-build-only-not-a-secret
+RUN SECRET_KEY=${DJANGO_SECRET_KEY_BUILD} \
+    python manage.py collectstatic --noinput
+
+EXPOSE 8000
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "config.asgi:application"]

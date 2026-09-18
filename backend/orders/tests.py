@@ -337,6 +337,35 @@ class PaymentTests(BaseFlowersTestCase):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.data["error"]["code"], "stub_disabled")
 
+    def test_shop_sms_sent_on_payment(self):
+        """После успешной оплаты магазину ставится SMS-задача о новом заказе."""
+        order = self.create_order()
+        with mock.patch(
+            "orders.tasks.notify_shop_new_order_sms.apply_async"
+        ) as sms_task:
+            self.pay_order(order)
+        sms_task.assert_called_once_with((order.id,))
+
+    def test_shop_sms_task_sends_text(self):
+        """Сама задача шлёт SMS на телефон магазина; без телефона — no-op."""
+        from orders.tasks import notify_shop_new_order_sms
+
+        order = self.create_order()
+        order.shop.phone = "+992900000009"
+        order.shop.save(update_fields=["phone"])
+        with mock.patch("accounts.sms.send_sms") as send:
+            notify_shop_new_order_sms(order.id)
+        send.assert_called_once()
+        phone, text = send.call_args.args
+        self.assertEqual(phone, order.shop.phone)
+        self.assertIn(order.number, text)
+
+        order.shop.phone = ""
+        order.shop.save(update_fields=["phone"])
+        with mock.patch("accounts.sms.send_sms") as send:
+            notify_shop_new_order_sms(order.id)
+        send.assert_not_called()
+
 
 @override_settings(ALLOW_STUB_PAYMENTS=True)
 class OrderCancelTests(BaseFlowersTestCase):

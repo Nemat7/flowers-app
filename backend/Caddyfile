@@ -1,0 +1,55 @@
+# Caddyfile — production reverse proxy для Flowers & Sweets.
+#
+# Адреса сайтов задаются через переменные окружения (см. docker-compose.prod.yml):
+#   SITE_ADDRESS  — основной домен API (прод: {$DOMAIN}, т.е. например flowers.tj)
+#   PANEL_ADDRESS — домен панели магазина (прод: panel.{$DOMAIN})
+# Caddy сам получает и продлевает сертификаты Let's Encrypt (нужны открытые
+# порты 80/443 и DNS A-записи на оба домена).
+
+{$SITE_ADDRESS} {
+	encode zstd gzip
+
+	# API (JWT, DRF)
+	handle /api/* {
+		reverse_proxy backend:8000
+	}
+
+	# WebSocket-каналы (Channels): Caddy проксирует Upgrade из коробки,
+	# таймаутов на чтение по умолчанию нет — соединение живёт сколько нужно.
+	handle /ws/* {
+		reverse_proxy backend:8000 {
+			flush_interval -1
+		}
+	}
+
+	# Django Admin (включая /admin/dashboard/)
+	handle /admin/* {
+		reverse_proxy backend:8000
+	}
+
+	# Загруженные файлы (фото товаров, магазинов) — отдаёт Caddy напрямую из volume
+	handle /media/* {
+		root * /srv
+		file_server
+	}
+
+	# Статика (админка, drf-spectacular) — из volume, обновляется collectstatic-сервисом
+	handle /static/* {
+		root * /srv
+		file_server
+	}
+
+	# Всё остальное — 404
+	handle {
+		respond "Not Found" 404
+	}
+}
+
+{$PANEL_ADDRESS} {
+	encode zstd gzip
+
+	root * /srv/panel
+	# SPA-фолбэк: неизвестные пути отдают index.html (роутинг на клиенте)
+	try_files {path} /index.html
+	file_server
+}

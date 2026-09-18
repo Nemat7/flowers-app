@@ -1,0 +1,158 @@
+# Production-стек Flowers & Sweets.
+# Запуск: docker compose --env-file .env.production -f docker-compose.prod.yml up -d
+#
+# Отдельный project name (flowers-prod), чтобы volumes/контейнеры не
+# пересекались с dev-стеком из docker-compose.yml (project name "backend").
+name: flowers-prod
+
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-flowers}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?задайте POSTGRES_PASSWORD в .env.production}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # Наружных портов нет — БД доступна только внутри docker-сети.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    # Наружных портов нет — Redis доступен только внутри docker-сети.
+    volumes:
+      - redisdata:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    image: flowers-backend:prod
+    restart: unless-stopped
+    env_file: .env.production
+    # Наружного порта нет — backend доступен только через Caddy.
+    volumes:
+      - media:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      # /admin/login/ отвечает 200 без авторизации
+      test: >
+        python -c "import urllib.request;
+        urllib.request.urlopen('http://localhost:8000/admin/login/', timeout=5)"
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 10s
+
+  celery:
+    image: flowers-backend:prod
+    restart: unless-stopped
+    env_file: .env.production
+    command: celery -A config worker -l info
+    volumes:
+      - media:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "celery -A config inspect ping -d celery@$$HOSTNAME"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 15s
+
+  # Одноразовый сервис: применяет миграции перед стартом backend/celery.
+  migrate:
+    image: flowers-backend:prod
+    env_file: .env.production
+    command: python manage.py migrate --noinput
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  # Одноразовый сервис: выкладывает статику из образа в volume,
+  # откуда её раздаёт Caddy. Перезапускается при каждом `up` (идемпотентно).
+  collectstatic:
+    image: flowers-backend:prod
+    env_file: .env.production
+    command: python manage.py collectstatic --noinput
+    volumes:
+      - staticfiles:/app/staticfiles
+    restart: "no"
+
+  # Одноразовый сервис: собирает панель магазина (npm run build в образе)
+  # и копирует dist в volume для Caddy.
+  panel:
+    build:
+      context: ../shop-panel
+      args:
+        # URL API/WS зашиваются в бандл на этапе сборки панели.
+        # По умолчанию выводятся из DOMAIN; можно переопределить в .env.production.
+        VITE_API_URL: ${PANEL_API_URL:-https://${DOMAIN}/api/v1}
+        VITE_WS_URL: ${PANEL_WS_URL:-wss://${DOMAIN}/ws}
+    image: flowers-panel:prod
+    volumes:
+      - panel_dist:/dist
+    restart: "no"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      # Для локальной проверки: HTTP_PORT=8088 HTTPS_PORT=8443 (порт 80 занят tajiflix).
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-${DOMAIN:?задайте DOMAIN в .env.production}}
+      PANEL_ADDRESS: ${PANEL_ADDRESS:-panel.${DOMAIN}}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - media:/srv/media:ro
+      - staticfiles:/srv/static:ro
+      - panel_dist:/srv/panel:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      backend:
+        condition: service_started
+      panel:
+        condition: service_completed_successfully
+    healthcheck:
+      # admin-эндпоинт Caddy (localhost:2019) — проверка не зависит от домена
+      test: wget -qO- http://localhost:2019/config/ >/dev/null || exit 1
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+volumes:
+  pgdata:
+  redisdata:
+  media:
+  staticfiles:
+  panel_dist:
+  caddy_data:
+  caddy_config:

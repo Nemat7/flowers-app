@@ -115,6 +115,10 @@ class PayOrderView(APIView):
                 "new_order",
                 {"order_id": order.id, "number": order.number},
             )
+            # SMS магазину о новом заказе (на случай закрытой панели)
+            from orders.tasks import notify_shop_new_order_sms
+
+            notify_shop_new_order_sms.apply_async((order.id,))
         return Response(self._payload(payment), status=status.HTTP_201_CREATED)
 
     @staticmethod

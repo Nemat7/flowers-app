@@ -7,6 +7,10 @@ venv/
 
 # Окружение и секреты
 .env
+.env.production
+.env.production.local
+backend/.env.production
+backend/.env.production.local
 
 # Загруженные файлы и статика
 backend/media/
