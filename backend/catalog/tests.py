@@ -2,9 +2,12 @@
 import base64
 from datetime import time
 
+from django.contrib.gis.geos import Point
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from catalog.models import Product, ProductPhoto, Shop, ShopWorkingHours
+from accounts.models import User
+from catalog.models import Product, ProductPhoto, Shop, ShopStaff, ShopWorkingHours
+from delivery.models import CourierProfile
 from marketing.models import Banner
 from orders.tests import LAT, LNG, BaseFlowersTestCase
 
@@ -316,3 +319,85 @@ class HomeScreenApiTests(BaseFlowersTestCase):
         response = self.api.get("/api/v1/categories/")
         card = next(c for c in response.data if c["id"] == self.category.id)
         self.assertIn("categories/bukety.jpg", card["image"])
+
+
+class ShopStaffRoleSyncTests(BaseFlowersTestCase):
+    """User.role синкается с членством ShopStaff (панель пускает по роли)."""
+
+    def test_role_synced_on_create_and_delete(self):
+        user = User.objects.create_user(phone="+992900000010")
+        self.assertEqual(user.role, User.Role.CLIENT)
+
+        staff = ShopStaff.objects.create(user=user, shop=self.shop)
+        user.refresh_from_db()
+        self.assertEqual(user.role, User.Role.SHOP_STAFF)
+
+        staff.delete()
+        user.refresh_from_db()
+        self.assertEqual(user.role, User.Role.CLIENT)
+
+    def test_role_kept_while_other_membership_exists(self):
+        user = User.objects.create_user(phone="+992900000011")
+        first = ShopStaff.objects.create(user=user, shop=self.shop)
+        ShopStaff.objects.create(user=user, shop=self.other_shop)
+
+        first.delete()
+        user.refresh_from_db()
+        self.assertEqual(user.role, User.Role.SHOP_STAFF)
+
+    def test_courier_role_not_touched(self):
+        courier = User.objects.create_user(
+            phone="+992900000012", role=User.Role.COURIER
+        )
+        CourierProfile.objects.create(
+            user=courier, current_point=Point(LNG, LAT, srid=4326)
+        )
+        staff = ShopStaff.objects.create(user=courier, shop=self.shop)
+        courier.refresh_from_db()
+        self.assertEqual(courier.role, User.Role.COURIER)
+
+        staff.delete()
+        courier.refresh_from_db()
+        self.assertEqual(courier.role, User.Role.COURIER)
+
+    def test_admin_role_not_downgraded(self):
+        admin = User.objects.create_user(
+            phone="+992900000013", role=User.Role.ADMIN
+        )
+        staff = ShopStaff.objects.create(user=admin, shop=self.shop)
+        admin.refresh_from_db()
+        self.assertEqual(admin.role, User.Role.ADMIN)
+
+        staff.delete()
+        admin.refresh_from_db()
+        self.assertEqual(admin.role, User.Role.ADMIN)
+
+
+class ShopListNoPointTests(BaseFlowersTestCase):
+    """GET /shops/ с магазином без гео-точки: не падает, отдаёт его в конце."""
+
+    def setUp(self):
+        super().setUp()
+        self.api.force_authenticate(self.client_user)
+
+    def test_shop_without_point_listed_last(self):
+        shop = Shop.objects.create(
+            name="Без точки", address_text="—", status=Shop.Status.APPROVED
+        )
+        response = self.api.get("/api/v1/shops/", {"lat": LAT, "lng": LNG})
+        self.assertEqual(response.status_code, 200, response.data)
+        results = response.data["results"]
+        card = next(s for s in results if s["id"] == shop.id)
+        self.assertIsNone(card["distance_m"])
+        self.assertIsNone(card["delivery_time_est"])
+        # магазины без точки — в конце выдачи
+        self.assertEqual(results[-1]["id"], shop.id)
+
+    def test_shop_without_point_without_coords(self):
+        shop = Shop.objects.create(
+            name="Без точки", address_text="—", status=Shop.Status.APPROVED
+        )
+        response = self.api.get("/api/v1/shops/")
+        self.assertEqual(response.status_code, 200, response.data)
+        ids = [s["id"] for s in response.data["results"]]
+        self.assertIn(shop.id, ids)

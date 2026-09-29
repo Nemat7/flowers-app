@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.contrib.gis.db import models
 
+from accounts.models import User
+
 
 class Shop(models.Model):
     class Status(models.TextChoices):
@@ -14,7 +16,11 @@ class Shop(models.Model):
     inn = models.CharField("ИНН", max_length=20, blank=True)
     legal_name = models.CharField("юр. название", max_length=200, blank=True)
     phone = models.CharField("телефон", max_length=16, blank=True)
-    point = models.PointField(geography=True, srid=4326)
+    point = models.PointField(
+        geography=True, srid=4326, null=True, blank=True,
+        help_text="Необязательно: если точка не выбрана на карте, "
+                  "в админке подставится центр Душанбе",
+    )
     address_text = models.CharField("адрес", max_length=255)
     logo = models.ImageField(upload_to="shops/logos/", blank=True)
     cover_photo = models.ImageField(upload_to="shops/covers/", blank=True)
@@ -89,6 +95,25 @@ class ShopStaff(models.Model):
             models.UniqueConstraint(fields=["user", "shop"], name="unique_user_shop_staff")
         ]
         indexes = [models.Index(fields=["shop"])]
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # Панель магазина пускает по User.role == shop_staff — синкаем роль.
+        # Понижаем только клиента: админа/курьера не трогаем.
+        user = self.user
+        if user.role == User.Role.CLIENT:
+            user.role = User.Role.SHOP_STAFF
+            user.save(update_fields=["role", "updated_at"])
+
+    def delete(self, *args, **kwargs):
+        user = self.user
+        result = super().delete(*args, **kwargs)
+        # Роль возвращаем, только если других членств в магазинах не осталось.
+        # Курьер (role=courier + CourierProfile) сюда не попадёт — роль другая.
+        if user.role == User.Role.SHOP_STAFF and not user.shop_memberships.exists():
+            user.role = User.Role.CLIENT
+            user.save(update_fields=["role", "updated_at"])
+        return result
 
     def __str__(self):
         return f"{self.user} @ {self.shop} ({self.get_role_display()})"

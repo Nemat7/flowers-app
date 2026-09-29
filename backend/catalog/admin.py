@@ -1,7 +1,11 @@
 from django.contrib import admin
 from django.contrib.gis.admin import GISModelAdmin
+from django.contrib.gis.geos import Point
 
 from .models import Category, Product, ProductPhoto, Shop, ShopStaff, ShopWorkingHours
+
+# центр Душанбе (пл. Дусти / Рудаки) — дефолт, если точку не выбрали на карте
+DEFAULT_POINT = Point(68.7870, 38.5598, srid=4326)
 
 
 class ShopWorkingHoursInline(admin.TabularInline):
@@ -30,6 +34,12 @@ class ShopAdmin(GISModelAdmin):
     search_fields = ("name", "inn", "legal_name", "phone")
     filter_horizontal = ("zones",)
     inlines = (ShopWorkingHoursInline, ShopStaffInline)
+
+    def save_model(self, request, obj, form, change):
+        # точка необязательна (blank=True): без выбора на карте — центр Душанбе
+        if not obj.point:
+            obj.point = DEFAULT_POINT
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(ShopStaff)

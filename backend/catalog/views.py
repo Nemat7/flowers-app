@@ -2,7 +2,7 @@ from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
 from django.db import transaction
-from django.db.models import OuterRef, Q, Subquery
+from django.db.models import F, OuterRef, Q, Subquery
 from rest_framework import generics, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
@@ -70,9 +70,12 @@ class ShopListView(generics.ListAPIView):
         )
         point = _request_point(self.request)
         if point is not None:
-            qs = qs.filter(point__distance_lte=(point, D(km=100))).annotate(
-                distance=Distance("point", point)
-            ).order_by("distance")
+            # магазины без точки не теряем: distance=NULL, в конце выдачи
+            qs = (
+                qs.filter(Q(point__distance_lte=(point, D(km=100))) | Q(point__isnull=True))
+                .annotate(distance=Distance("point", point))
+                .order_by(F("distance").asc(nulls_last=True))
+            )
         else:
             qs = qs.order_by("-rating_avg", "-rating_count", "id")
 
